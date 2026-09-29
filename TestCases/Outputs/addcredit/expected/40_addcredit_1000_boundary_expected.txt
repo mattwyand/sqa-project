@@ -1,0 +1,2 @@
+Add credit succeeds because the session total is exactly 1000.00.
+A 06 transaction for 1000.00 is written.

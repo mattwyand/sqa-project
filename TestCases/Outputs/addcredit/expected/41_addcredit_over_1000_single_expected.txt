@@ -1,0 +1,2 @@
+Add credit is rejected because more than 1000.00 would be added in the session.
+No 06 transaction is written.

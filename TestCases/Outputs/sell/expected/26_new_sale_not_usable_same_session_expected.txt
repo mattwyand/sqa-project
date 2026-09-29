@@ -1,0 +1,3 @@
+First session: the sell succeeds and is recorded.
+Second session in the same Front End run/test stream: buying the newly listed game is rejected because new sale data is not available until the next session/day input files are refreshed.
+This test documents the requirement that new games cannot be acted on in the same session data set.

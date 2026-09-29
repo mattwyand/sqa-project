@@ -1,0 +1,3 @@
+Refund succeeds.
+5.00 credit is transferred from seller to buyer.
+A refund transaction (05) is written with buyer, seller, and amount 5.00.

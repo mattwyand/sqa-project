@@ -1,0 +1,2 @@
+The invalid credit amount is rejected or re-prompted without crashing.
+No add-credit transaction is written unless a valid amount is later supplied.

@@ -1,0 +1,2 @@
+Delete is rejected because 'ghostuser' is not a current user.
+No delete transaction is written.

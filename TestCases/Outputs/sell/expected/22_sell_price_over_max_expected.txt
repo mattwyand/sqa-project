@@ -1,0 +1,2 @@
+Sell is rejected because the price exceeds 999.99.
+No sell transaction is written.

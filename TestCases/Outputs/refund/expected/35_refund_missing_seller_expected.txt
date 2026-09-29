@@ -1,0 +1,2 @@
+Refund is rejected because the seller is not a current user.
+No 05 transaction is written.

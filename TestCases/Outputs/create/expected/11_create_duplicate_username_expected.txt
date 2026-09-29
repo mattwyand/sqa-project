@@ -1,0 +1,2 @@
+Create is rejected because 'buyer' already exists.
+No create transaction is written.

@@ -1,0 +1,2 @@
+Create is rejected because the username is 16 characters long.
+No create transaction is written.

@@ -1,0 +1,4 @@
+REQUIREMENTS PROBLEM:
+The Front End requirements say buyer and seller must both exist, but do not explicitly say whether the seller must have enough credit for the refund.
+Expected behaviour must be confirmed with the TA/client before implementation.
+The Front End must not crash.

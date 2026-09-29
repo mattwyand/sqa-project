@@ -1,0 +1,4 @@
+Login succeeds for user 'admin'.
+Admin session begins and privileged/unprivileged transactions are available.
+Logout succeeds.
+A daily transaction file is written and ends with transaction code 00.

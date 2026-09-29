@@ -1,0 +1,4 @@
+The first login succeeds.
+The second login is rejected because a session is already active.
+The active user remains 'admin'.
+Logout succeeds.

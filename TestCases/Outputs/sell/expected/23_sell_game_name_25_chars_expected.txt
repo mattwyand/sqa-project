@@ -1,0 +1,2 @@
+Sell succeeds because the game name is exactly 25 characters long.
+A 03 transaction is written.

@@ -1,0 +1,2 @@
+Sell succeeds at exactly 999.99.
+A 03 transaction is written with price 999.99.

@@ -1,0 +1,2 @@
+All four create transactions succeed.
+The daily transaction file contains four 01 records with user types AA, FS, BS, and SS, followed by 00.

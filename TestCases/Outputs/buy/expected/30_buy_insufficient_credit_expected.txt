@@ -1,0 +1,2 @@
+Buy is rejected because 'lowcredit' lacks sufficient funds.
+No balance becomes negative and no buy transaction is written.

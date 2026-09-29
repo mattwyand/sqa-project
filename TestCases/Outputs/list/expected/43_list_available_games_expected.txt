@@ -1,0 +1,3 @@
+LIST succeeds and outputs every game currently in the available games file.
+For each game, relevant sale information is displayed, including at minimum the game name, seller username, and price.
+LIST does not modify balances, ownership, or the daily transaction data.

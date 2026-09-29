@@ -1,0 +1,2 @@
+Add credit succeeds for existing user 'buyer'.
+A 06 transaction is written with buyer and 100.00.

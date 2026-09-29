@@ -1,0 +1,4 @@
+The buy transaction is rejected because no user is logged in.
+The later login for 'buyer' succeeds.
+Logout succeeds.
+No buy transaction is written to the daily transaction file.

@@ -1,0 +1,2 @@
+Buy is rejected because 'buyer' already owns 'Owned Game'.
+No duplicate collection entry or buy transaction is created.

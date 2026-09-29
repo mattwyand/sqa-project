@@ -1,0 +1,2 @@
+The invalid price input is rejected or re-prompted without crashing.
+No sell transaction is written unless a later valid price is supplied.

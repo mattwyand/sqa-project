@@ -1,0 +1,2 @@
+LIST is rejected because no user is logged in.
+The Front End remains running and later accepts login.

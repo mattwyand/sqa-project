@@ -1,0 +1,2 @@
+Sell is rejected because all game names must be unique and 'Portal 2' already exists.
+No sell transaction is written.

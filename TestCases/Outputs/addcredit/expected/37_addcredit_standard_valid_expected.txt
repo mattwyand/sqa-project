@@ -1,0 +1,2 @@
+Add credit succeeds for the logged-in user's own account.
+A 06 add-credit transaction is written for buyer with 100.00.

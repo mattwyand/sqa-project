@@ -1,0 +1,3 @@
+Create succeeds for 'newuser' with type FS.
+A create transaction (01) for newuser is written to the daily transaction file.
+Logout writes the final 00 transaction.

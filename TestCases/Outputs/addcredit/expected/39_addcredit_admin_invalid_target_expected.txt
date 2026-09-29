@@ -1,0 +1,2 @@
+Add credit is rejected because 'ghostuser' is not a current user.
+No 06 transaction is written.

@@ -1,0 +1,15 @@
+login
+admin
+create
+newadmin
+AA
+create
+newfull
+FS
+create
+newbuyer
+BS
+create
+newseller
+SS
+logout

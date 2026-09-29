@@ -1,0 +1,2 @@
+Buy is rejected because a sell-standard account cannot buy.
+No 04 transaction is written.

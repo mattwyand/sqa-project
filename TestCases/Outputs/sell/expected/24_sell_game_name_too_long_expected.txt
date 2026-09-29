@@ -1,0 +1,2 @@
+Sell is rejected because the game name is 26 characters long.
+No sell transaction is written.

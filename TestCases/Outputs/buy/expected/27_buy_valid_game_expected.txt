@@ -1,0 +1,4 @@
+Buy succeeds.
+The buyer's collection is updated for the session.
+Seller is credited by the game price and buyer is debited by the same amount.
+A buy transaction (04) is written with game, seller, buyer, and price.

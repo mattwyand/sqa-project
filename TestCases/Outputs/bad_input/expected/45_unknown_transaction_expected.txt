@@ -1,0 +1,4 @@
+The unknown transaction 'dance' is rejected with a polite error.
+The session remains active.
+Logout still succeeds.
+No unknown transaction is written.

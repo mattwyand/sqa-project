@@ -1,0 +1,3 @@
+The first logout is rejected because no session is active.
+The Front End continues running.
+The later login and logout succeed.

@@ -1,0 +1,8 @@
+login
+admin
+delete
+seller
+buy
+Portal 2
+seller
+logout

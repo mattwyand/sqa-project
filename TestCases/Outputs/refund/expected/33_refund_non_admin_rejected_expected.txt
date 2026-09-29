@@ -1,0 +1,2 @@
+Refund is rejected because it is privileged.
+No refund transaction is written.

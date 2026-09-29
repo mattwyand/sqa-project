@@ -1,0 +1,2 @@
+Delete succeeds for 'fulluser'.
+A delete transaction (02) is written to the daily transaction file.

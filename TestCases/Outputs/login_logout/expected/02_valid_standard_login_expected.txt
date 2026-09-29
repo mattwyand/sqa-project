@@ -1,0 +1,4 @@
+Login succeeds for user 'fulluser'.
+Standard session begins.
+Privileged transactions are not permitted.
+Logout succeeds and the daily transaction file ends with 00.

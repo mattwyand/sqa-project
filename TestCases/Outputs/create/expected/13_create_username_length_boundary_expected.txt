@@ -1,0 +1,2 @@
+Create succeeds because the username length is exactly 15 characters.
+A 01 create transaction is written.

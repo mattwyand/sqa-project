@@ -1,0 +1,6 @@
+login
+seller
+sell
+Max Price Game
+999.99
+logout

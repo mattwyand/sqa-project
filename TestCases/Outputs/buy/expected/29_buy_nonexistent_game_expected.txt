@@ -1,0 +1,2 @@
+Buy is rejected because the game does not exist in the available games file.
+No buy transaction is written.

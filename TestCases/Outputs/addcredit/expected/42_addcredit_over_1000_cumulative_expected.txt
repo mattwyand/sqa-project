@@ -1,0 +1,3 @@
+The 600.00 and 400.00 additions succeed, reaching 1000.00 total for the session.
+The final 0.01 addition is rejected.
+Only the successful add-credit transactions are written.

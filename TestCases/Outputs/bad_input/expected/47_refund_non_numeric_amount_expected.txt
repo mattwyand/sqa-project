@@ -1,0 +1,2 @@
+The invalid refund amount is rejected or re-prompted without crashing.
+No refund transaction is written unless a valid amount is later supplied.

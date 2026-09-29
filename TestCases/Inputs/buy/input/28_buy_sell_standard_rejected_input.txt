@@ -1,0 +1,6 @@
+login
+seller
+buy
+Portal 2
+seller
+logout

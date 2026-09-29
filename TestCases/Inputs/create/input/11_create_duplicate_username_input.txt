@@ -1,0 +1,6 @@
+login
+admin
+create
+buyer
+FS
+logout
