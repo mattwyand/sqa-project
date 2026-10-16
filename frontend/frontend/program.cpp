@@ -13,16 +13,16 @@ void Program::run()
 	while (!exit_program)
 	{
 		// TEMP
-		clearCommands();
+		clear_command();
 		if (!logged_in)
 		{
-			pushCommand<LoginCommand>();
+			push_command<LoginCommand>();
 		}
 		else
 		{
-			pushCommand<LogoutCommand>();
+			push_command<LogoutCommand>();
 		}
-		pushCommand<ExitCommand>();
+		push_command<ExitCommand>();
 
 		print_mainmenu();
 
@@ -87,8 +87,9 @@ void Program::exit()
 	exit_program = true;
 }
 
-void Program::clearCommands()
+void Program::clear_command()
 {
+	// Commands are heap allocated, so we need to free them here...
 	for (Command *c : commands)
 	{
 		delete c;

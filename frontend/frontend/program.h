@@ -10,16 +10,17 @@
 class Program
 {
 private:
+	// Program state
 	bool logged_in = false;
-	std::string username = "";
-
 	bool exit_program = false;
+
+	std::string username = "";
 
 	std::vector<Command *> commands{};
 
 	template <class T>
-	void pushCommand();
-	void clearCommands();
+	void push_command();
+	void clear_command();
 
 public:
 	void run();
@@ -33,7 +34,7 @@ public:
 };
 
 template<class T>
-inline void Program::pushCommand()
+inline void Program::push_command()
 {
 	commands.emplace_back(new T(this));
 }
