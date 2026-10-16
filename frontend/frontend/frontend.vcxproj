@@ -102,6 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,7 +124,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="commands.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="program.cpp" />
+    <ClCompile Include="util.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="commands.h" />
+    <ClInclude Include="program.h" />
+    <ClInclude Include="util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

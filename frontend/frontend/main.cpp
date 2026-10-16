@@ -1,7 +1,9 @@
-#include <iostream>
+#include "program.h"
 
 int main()
 {
-	printf("Working\n");
+	Program program;
+	program.run();
+
 	return 0;
 }
