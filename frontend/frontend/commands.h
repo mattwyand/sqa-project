@@ -43,3 +43,10 @@ public:
 	LogoutCommand(Program *program);
 	void run(const std::vector<std::string> &args) override;
 };
+
+class ListGamesCommand : public Command
+{
+public:
+	ListGamesCommand(Program* program);
+	void run(const std::vector<std::string>& args) override;
+};

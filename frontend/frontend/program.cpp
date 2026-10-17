@@ -2,6 +2,7 @@
 
 #include "commands.h"
 #include "util.h"
+#include "game.h"
 
 #include <iostream>
 #include <vector>
@@ -12,18 +13,7 @@ void Program::run()
 
 	while (!exit_program)
 	{
-		// TEMP
-		clear_command();
-		if (!logged_in)
-		{
-			push_command<LoginCommand>();
-		}
-		else
-		{
-			push_command<LogoutCommand>();
-		}
-		push_command<ExitCommand>();
-
+		build_command_list();
 		print_mainmenu();
 
 		// Get input
@@ -64,8 +54,8 @@ void Program::print_mainmenu()
 {
 	if (logged_in)
 	{
-		// Print username in menu header
-		std::cout << "-- Menu (" << username << ") --\n";
+		// Print username in menu header if we're logged in
+		std::cout << "-- Menu (" << user.get_name() << ") --\n";
 	}
 	else
 	{
@@ -76,18 +66,29 @@ void Program::print_mainmenu()
 	{
 		command->print_description();
 	}
+
 	std::cout << "\n>";
+}
+
+void Program::list_owned_games()
+{
+	for (auto &game : user.get_owned_games())
+	{
+		std::cout << "\"" << game.get_name() << "\" - " << game.get_description() << "\n"
+			<< "Seller: " << game.get_seller_username() << "\n"
+			<< "Price: $" << game.get_price() << "\n\n";
+	}
 }
 
 void Program::login(const std::string &name)
 {
 	logged_in = true;
-	username = name;
+	user = get_user(name);
 
 	std::cout << "Logged in as '" << name << "'\n";
 
 	// Check if we're an admin
-	if (username == "admin")
+	if (user.get_name() == "admin")
 	{
 		std::cout << "Began Admin session. Privileged/unprivileged transactions are available.\n";
 	}
@@ -96,7 +97,7 @@ void Program::login(const std::string &name)
 void Program::logout()
 {
 	logged_in = false;
-	username = "";
+	user = User(); // Reset to default user
 }
 
 void Program::exit()
@@ -113,4 +114,20 @@ void Program::clear_command()
 		delete c;
 	}
 	commands.clear();
+}
+
+void Program::build_command_list()
+{
+	clear_command();
+	if (!logged_in)
+	{
+		push_command<LoginCommand>();
+	}
+	else
+	{
+		push_command<LogoutCommand>();
+		push_command<ListGamesCommand>();
+	}
+
+	push_command<ExitCommand>();
 }
