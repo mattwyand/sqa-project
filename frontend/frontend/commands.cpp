@@ -6,7 +6,7 @@
 
 void Command::print_description()
 {
-	std::cout << "\"" << name << "\" - " << description << "\n";
+	std::cout << name << "\t- " << description << "\n";
 }
 
 
@@ -32,7 +32,6 @@ void LoginCommand::run(const std::vector<std::string> &args)
 		return;
 	}
 
-	std::cout << "Logged in\n";
 	program->login(args[1]);
 }
 

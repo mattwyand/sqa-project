@@ -62,18 +62,35 @@ void Program::print_startup()
 
 void Program::print_mainmenu()
 {
-	std::cout << "-- Menu --\n";
+	if (logged_in)
+	{
+		// Print username in menu header
+		std::cout << "-- Menu (" << username << ") --\n";
+	}
+	else
+	{
+		std::cout << "-- Menu --\n";
+	}
 
 	for (Command *command : commands)
 	{
 		command->print_description();
 	}
+	std::cout << "\n>";
 }
 
 void Program::login(const std::string &name)
 {
 	logged_in = true;
 	username = name;
+
+	std::cout << "Logged in as '" << name << "'\n";
+
+	// Check if we're an admin
+	if (username == "admin")
+	{
+		std::cout << "Began Admin session. Privileged/unprivileged transactions are available.\n";
+	}
 }
 
 void Program::logout()
@@ -85,6 +102,7 @@ void Program::logout()
 void Program::exit()
 {
 	exit_program = true;
+	std::cout << "Closing program...\n";
 }
 
 void Program::clear_command()
