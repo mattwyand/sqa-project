@@ -22,4 +22,3 @@ public:
 	inline const float get_price() const { return price; }
 };
 
-Game get_game(const std::string& name);

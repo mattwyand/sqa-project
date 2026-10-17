@@ -9,6 +9,9 @@
 
 void Program::run()
 {
+	init_game_list();
+	init_users_list();
+
 	print_startup();
 
 	while (!exit_program)
@@ -27,7 +30,7 @@ void Program::run()
 
 		// See if we input one of the commands listed
 		auto args = split(input, ' ');
-		for (Command *command : commands)
+		for (Command* command : commands)
 		{
 			if (args[0] == command->get_name())
 			{
@@ -55,14 +58,14 @@ void Program::print_mainmenu()
 	if (logged_in)
 	{
 		// Print username in menu header if we're logged in
-		std::cout << "-- Menu (" << user.get_name() << ") --\n";
+		std::cout << "-- Menu (" << user->get_name() << ") --\n";
 	}
 	else
 	{
 		std::cout << "-- Menu --\n";
 	}
 
-	for (Command *command : commands)
+	for (Command* command : commands)
 	{
 		command->print_description();
 	}
@@ -70,17 +73,41 @@ void Program::print_mainmenu()
 	std::cout << "\n>";
 }
 
-void Program::list_owned_games()
+User *Program::get_user(const std::string &name) const
 {
-	for (auto &game : user.get_owned_games())
+	if (user_database.count(name))
 	{
-		std::cout << "\"" << game.get_name() << "\" - " << game.get_description() << "\n"
-			<< "Seller: " << game.get_seller_username() << "\n"
-			<< "Price: $" << game.get_price() << "\n\n";
+		return user_database.at(name);
+	}
+	else
+	{
+		return nullptr;
 	}
 }
 
-void Program::login(const std::string &name)
+Game *Program::get_game(const std::string& name) const
+{
+	if (game_database.count(name))
+	{
+		return game_database.at(name);
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+void Program::list_owned_games()
+{
+	for (auto& game : user->get_owned_games())
+	{
+		std::cout << "\"" << game->get_name() << "\" - " << game->get_description() << "\n"
+			<< "Seller: " << game->get_seller_username() << "\n"
+			<< "Price: $" << game->get_price() << "\n\n";
+	}
+}
+
+void Program::login(const std::string& name)
 {
 	logged_in = true;
 	user = get_user(name);
@@ -88,7 +115,7 @@ void Program::login(const std::string &name)
 	std::cout << "Logged in as '" << name << "'\n";
 
 	// Check if we're an admin
-	if (user.get_name() == "admin")
+	if (user->get_name() == "admin")
 	{
 		std::cout << "Began Admin session. Privileged/unprivileged transactions are available.\n";
 	}
@@ -97,7 +124,7 @@ void Program::login(const std::string &name)
 void Program::logout()
 {
 	logged_in = false;
-	user = User(); // Reset to default user
+	user = nullptr;
 }
 
 void Program::exit()
@@ -106,10 +133,60 @@ void Program::exit()
 	std::cout << "Closing program...\n";
 }
 
+void Program::init_game_list()
+{
+	auto register_game = [this](
+		const std::string& name,
+		const std::string& desc,
+		const std::string& seller,
+		float price)
+		{
+			this->game_database.insert({
+				name,
+				new Game(name, desc, seller, price)
+				});
+		};
+
+	register_game(
+		"game1",
+		"This is game 1",
+		"Nintendo",
+		999.0f);
+
+	register_game(
+		"game2",
+		"This is game 2",
+		"Bethesda",
+		2.0f);
+}
+
+void Program::init_users_list()
+{
+	auto register_user = [this](
+		const std::string name,
+		const std::vector<Game*>& owned_games
+		)
+		{
+			User* u = new User();
+			u->name = name;
+			u->owned_games = owned_games;
+			user_database.insert({ name, u });
+		};
+
+	register_user("admin", {
+		get_game("game1"),
+		get_game("game2"),
+		});
+
+	register_user("carpet", {
+		get_game("game1"),
+		});
+}
+
 void Program::clear_command()
 {
 	// Commands are heap allocated, so we need to free them here...
-	for (Command *c : commands)
+	for (Command* c : commands)
 	{
 		delete c;
 	}
