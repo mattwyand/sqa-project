@@ -10,20 +10,7 @@ void Command::print_description()
 }
 
 
-// -- Exit --
-ExitCommand::ExitCommand(Program *program)
-	: Command(program, "exit", "exit the program") {}
-
-void ExitCommand::run(const std::vector<std::string> &args)
-{
-	program->exit();
-}
-
-
 // -- Login --
-LoginCommand::LoginCommand(Program *program)
-	: Command(program, "login", "log into your account") {}
-
 void LoginCommand::run(const std::vector<std::string> &args)
 {
 	if (args.size() < 2)
@@ -37,9 +24,6 @@ void LoginCommand::run(const std::vector<std::string> &args)
 
 
 // -- Logout --
-LogoutCommand::LogoutCommand(Program *program)
-	: Command(program, "logout", "log out of your account") {}
-
 void LogoutCommand::run(const std::vector<std::string> &args)
 {
 	std::cout << "Logged out\n";
@@ -48,11 +32,15 @@ void LogoutCommand::run(const std::vector<std::string> &args)
 
 
 // -- List games --
-ListGamesCommand::ListGamesCommand(Program* program)
-	: Command(program, "list", "list your owned games") {}
-
 void ListGamesCommand::run(const std::vector<std::string>& args)
 {
 	std::cout << "-- Owned games --\n";
 	program->list_owned_games();
+}
+
+
+// -- Exit --
+void ExitCommand::run(const std::vector<std::string> &args)
+{
+	program->exit();
 }

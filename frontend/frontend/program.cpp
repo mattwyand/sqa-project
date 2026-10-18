@@ -109,9 +109,14 @@ void Program::list_owned_games()
 
 void Program::login(const std::string& name)
 {
-	logged_in = true;
 	user = get_user(name);
+	if (!user)
+	{
+		std::cout << "User '" << name << "' does not exist.\n";
+		return;
+	}
 
+	logged_in = true;
 	std::cout << "Logged in as '" << name << "'\n";
 
 	// Check if we're an admin

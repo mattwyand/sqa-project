@@ -61,6 +61,7 @@ public:
 	void exit();
 };
 
+// TODO: Let's just allocate each command once, and push pointers from that into "commands"...
 template<class T>
 inline void Program::push_command()
 {
