@@ -70,7 +70,8 @@ class CreateCommand : public Command
 {
 public:
 	CreateCommand(Program* program)
-		: Command(program, "create", "Creates a new user with buying and/or advertising privileges.") {}
+		: Command(program, "create", "Add a user with the ability to buy/sell games.") {}
+		
 	void run(const std::vector<std::string> &args) override;
 };
 
@@ -84,7 +85,8 @@ class DeleteCommand : public Command
 {
 public:
 	DeleteCommand(Program *program)
-		: Command(program, "delete", "Cancel any games for sale and remove the user's account.") {}
+		: Command(program, "delete", "Remove a user.") {}
+
 	void run(const std::vector<std::string> &args) override;
 };
 
@@ -101,6 +103,7 @@ class SellCommand : public Command
 public:
 	SellCommand(Program *program)
 		: Command(program, "sell", "Put a game up for sale.") {}
+		
 	void run(const std::vector<std::string> &args) override;
 };
 
@@ -121,6 +124,7 @@ class BuyCommand : public Command
 public:
 	BuyCommand(Program *program)
 		: Command(program, "buy", "Purchase a game available for sale.") {}
+
 	void run(const std::vector<std::string> &args) override;
 };
 
@@ -140,12 +144,13 @@ class RefundCommand : public Command
 public:
 	RefundCommand(Program *program)
 		: Command(program, "refund", "Issue a credit to a buyer's account from a seller's account") {}
+
 	void run(const std::vector<std::string> &args) override;
 };
 
 
 /*
-add credit - Add credit into the system for the purchase of accounts
+addcredit - Add credit into the system for the purchase of accounts
 	- In admin mode, should ask for the amount of credit to add and the
 	  username of the account to which the credit is being added
 
@@ -157,7 +162,8 @@ class AddCreditCommand : public Command
 {
 public:
 	AddCreditCommand(Program *program)
-		: Command(program, "add credit", "Add credit to user") {}
+		: Command(program, "addcredit", "Add credit to user.") {}
+
 	void run(const std::vector<std::string> &args) override;
 };
 
@@ -167,7 +173,7 @@ class ListGamesCommand : public Command
 {
 public:
 	ListGamesCommand(Program* program)
-		: Command(program, "list", "list your owned games") {}
+		: Command(program, "list", "List your owned games.") {}
 
 	void run(const std::vector<std::string> &args) override;
 };

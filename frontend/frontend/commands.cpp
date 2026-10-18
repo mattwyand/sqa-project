@@ -18,7 +18,6 @@ void LoginCommand::run(const std::vector<std::string> &args)
 		std::cout << "usage: [name]\n";
 		return;
 	}
-
 	program->login(args[1]);
 }
 
