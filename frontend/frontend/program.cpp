@@ -23,6 +23,7 @@ void Program::run()
 {
 	init_data_path();
 	read_database();
+	//write_database();
 	
 	print_startup();
 
@@ -192,6 +193,43 @@ void Program::create_user(const std::string &name)
 	write_database();
 }
 
+void Program::delete_user(const std::string &name)
+{
+	// Check if user exists
+	if (!user_database.count(name))
+	{
+		std::cout << "Failed to delete account: user '" << name << "' doesn't exist.\n";
+		return;
+	}
+
+	// Delete the user from the database
+	user_database.erase(name);
+
+	std::cout << "Deleted user '" << name << "'\n";
+
+	// Save changes
+	write_database();
+}
+
+void Program::add_credit(const std::string &name, float amount)
+{
+	// Check if user exists
+	if (!user_database.count(name))
+	{
+		std::cout << "Failed to add funds: user '" << name << "' doesn't exist.\n";
+		return;
+	}
+
+	// Add funds to user
+	User *user = get_user(name);
+	user->wallet += amount;
+
+	// Save changes
+	write_database();
+
+	std::cout << "Added $" << amount << " to " << name << "'s wallet (new balance: $" << user->get_wallet_balance() << ")\n";
+}
+
 void Program::exit()
 {
 	exit_program = true;
@@ -270,8 +308,9 @@ void Program::read_database()
 
 		// Create new user
 		std::unique_ptr<User> u = std::make_unique<User>();
-		u->name = user["name"].get<std::string>();
 
+		u->name = user["name"].get<std::string>();
+		u->wallet = user["wallet"].get<float>();
 		if (user.contains("owned_games"))
 		{
 			for (auto &game_name : user["owned_games"])
@@ -279,6 +318,7 @@ void Program::read_database()
 				u->owned_games.push_back(game_name.get<std::string>());
 			}
 		}
+
 		user_database.insert({user["name"], std::move(u)});
 	}
 }
@@ -329,6 +369,7 @@ void Program::write_database()
 			user_objects.push_back(
 				{
 					{"name", user->name},
+					{"wallet", user->wallet},
 					{"owned_games", owned_games}
 				});
 		}
@@ -352,6 +393,7 @@ void Program::clear_command()
 void Program::build_command_list()
 {
 	clear_command();
+
 	if (!logged_in)
 	{
 		push_command<LoginCommand>();
@@ -361,9 +403,12 @@ void Program::build_command_list()
 		push_command<LogoutCommand>();
 		push_command<ListGamesCommand>();
 
+		// Add admin commands to the list
 		if (is_admin_session)
 		{
 			push_command<CreateCommand>();
+			push_command<DeleteCommand>();
+			push_command<AddCreditCommand>();
 		}
 	}
 

@@ -54,3 +54,6 @@ std::string to_lower_case(const std::string &str);
 
 // Split a string along a delimiter char
 std::vector<std::string> split(const std::string &str, char delim);
+
+// Can this string be converted into a float?
+bool is_float(const std::string &str);

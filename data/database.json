@@ -22,12 +22,14 @@
 	"users": [
 		{
 			"name": "admin",
+			"wallet": 999999.0,
 			"owned_games": [
 				"__all__"
 			]
 		},
 		{
 			"name": "valve",
+			"wallet": 50.0,
 			"owned_games": [
 				"deadlock",
 				"tf2"
@@ -35,12 +37,14 @@
 		},
 		{
 			"name": "sully",
+			"wallet": 6666.66,
 			"owned_games": [
 				"deadlock"
 			]
 		},
 		{
 			"name": "matthew",
+			"wallet": 0.75,
 			"owned_games": [
 				"deadlock",
 				"tf2",

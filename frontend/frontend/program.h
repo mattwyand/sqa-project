@@ -67,6 +67,8 @@ public:
 	void login(const std::string &name);
 	void logout();
 	void create_user(const std::string &name);
+	void delete_user(const std::string &name);
+	void add_credit(const std::string &name, float amount);
 
 	void exit();
 };
