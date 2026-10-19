@@ -16,14 +16,13 @@ using json = nlohmann::json;
 namespace
 {
 	const std::string DATABASE_FILENAME = "database.json";
+	const std::string ALL_GAMES = "__all__";
 }
 
 void Program::run()
 {
 	init_data_path();
 	read_database();
-
-	return;
 	
 	print_startup();
 
@@ -118,9 +117,27 @@ const std::filesystem::path &Program::get_data_path() const
 
 void Program::list_owned_games()
 {
+	std::cout << user->get_name() << "'s games:\n";
+
 	for (auto& game_name : user->get_owned_games())
 	{
+		// List all games if we encounter the special ALL_GAMES tag
+		if (game_name == ALL_GAMES)
+		{
+			for (auto &pair : game_database)
+			{
+				Game *g = pair.second.get();
+				std::cout << "\"" << g->get_name() << "\" - " << g->get_description() << "\n"
+					<< "Seller: " << g->get_seller_username() << "\n"
+					<< "Price: $" << g->get_price() << "\n\n";
+			}
+			continue;
+		}
+
 		Game *game = get_game(game_name);
+		if (!game)
+			continue;
+
 		std::cout << "\"" << game->get_name() << "\" - " << game->get_description() << "\n"
 			<< "Seller: " << game->get_seller_username() << "\n"
 			<< "Price: $" << game->get_price() << "\n\n";
@@ -246,7 +263,7 @@ void Program::read_database()
 void Program::write_database()
 {
 	// Write json data
-	std::ofstream f(data_path / DATABASE_FILENAME);
+	std::ofstream f(data_path / "database_output.json");
 	if (!f.is_open())
 	{
 		// Couldn't read json for some reason
@@ -255,8 +272,47 @@ void Program::write_database()
 		return;
 	}
 
-	
+	json j;
 
+	// -- Write games --
+	{
+		auto game_objects = json::array();
+		for (auto &pair : game_database)
+		{
+			auto *game = pair.second.get();
+			game_objects.push_back(
+				{
+					{"name", game->get_name() },
+					{"description", game->get_description() },
+					{"seller", game->get_seller_username() },
+					{"price", game->get_price()}
+				});
+		}
+		j["games"] = game_objects;
+	}
+
+	// -- Write users --
+	{
+		auto user_objects = json::array();
+		for (auto &pair : user_database)
+		{
+			User *user = pair.second.get();
+
+			auto owned_games = json::array();
+			for (auto &game_name : user->owned_games)
+			{
+				owned_games.push_back(game_name);
+			}
+			user_objects.push_back(
+				{
+					{"name", user->name},
+					{"owned_games", owned_games}
+				});
+		}
+		j["users"] = user_objects;
+	}
+
+	f << std::setw(4) << j << std::endl;
 	f.close();
 }
 

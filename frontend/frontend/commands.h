@@ -23,6 +23,7 @@ public:
 	inline const std::string get_name() const { return name; }
 };
 
+
 /*
 login - start a Front End session
 	- Before processing a login transaction, the front end reads the current user accounts file.
@@ -75,6 +76,7 @@ public:
 	void run(const std::vector<std::string> &args) override;
 };
 
+
 /*
 delete - Cancel any games for sale and remove the user account
 	- Should ask for the username (as a text line)
@@ -89,6 +91,7 @@ public:
 
 	void run(const std::vector<std::string> &args) override;
 };
+
 
 /*
 sell - Put a game up for sale
@@ -177,6 +180,7 @@ public:
 
 	void run(const std::vector<std::string> &args) override;
 };
+
 
 /*
 exit - exit the program

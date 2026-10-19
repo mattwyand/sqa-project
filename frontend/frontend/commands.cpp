@@ -33,7 +33,6 @@ void LogoutCommand::run(const std::vector<std::string> &args)
 // -- List games --
 void ListGamesCommand::run(const std::vector<std::string>& args)
 {
-	std::cout << "-- Owned games --\n";
 	program->list_owned_games();
 }
 
