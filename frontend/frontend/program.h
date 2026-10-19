@@ -22,13 +22,16 @@ private:
 	// Games "database"
 	std::unordered_map<std::string, std::unique_ptr<User>> user_database{};
 
+	// Transaction log
+	std::vector<std::string> transaction_log{};
+
 	// Program state
 	bool is_admin_session = false;
 	bool logged_in = false;
 	bool exit_program = false;
 
 	// Active user
-	User *user;
+	User *active_user;
 	
 	std::vector<Command *> commands{};
 
@@ -46,6 +49,9 @@ private:
 
 	// Figure out what commands to show in the menu based on program state
 	void build_command_list();
+
+	// For create, delete, add credit, end of session
+	void push_transaction_type1(const User *user, const std::string &transaction_code);
 
 public:
 	// Start the program
@@ -66,11 +72,12 @@ public:
 
 	void login(const std::string &name);
 	void logout();
-	void create_user(const std::string &name);
+	void exit();
+
+	// Admin commands
+	void create_user(const std::string &name, User::Type type);
 	void delete_user(const std::string &name);
 	void add_credit(const std::string &name, float amount);
-
-	void exit();
 };
 
 // TODO: Let's just allocate each command once, and push pointers from that into "commands"...

@@ -22,6 +22,7 @@
 	"users": [
 		{
 			"name": "admin",
+			"type": "admin",
 			"wallet": 999999.0,
 			"owned_games": [
 				"__all__"
@@ -29,6 +30,7 @@
 		},
 		{
 			"name": "valve",
+			"type": "sell-standard",
 			"wallet": 50.0,
 			"owned_games": [
 				"deadlock",
@@ -37,6 +39,7 @@
 		},
 		{
 			"name": "sully",
+			"type": "buy-standard",
 			"wallet": 6666.66,
 			"owned_games": [
 				"deadlock"
@@ -44,6 +47,7 @@
 		},
 		{
 			"name": "matthew",
+			"type": "full-standard",
 			"wallet": 0.75,
 			"owned_games": [
 				"deadlock",

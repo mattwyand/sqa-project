@@ -38,13 +38,34 @@ void ExitCommand::run(const std::vector<std::string> &args)
 
 void CreateCommand::run(const std::vector<std::string> &args)
 {
-	if (args.size() < 2)
+	// @TODO: Turn this into more than one step
+	if (args.size() < 3)
 	{
-		std::cout << "usage: create [name]\n";
+		std::cout << "usage: create [name] [type]\n";
+		return;
+	}
+
+	const std::string &type_str = args[2];
+	User::Type type = User::Type::None;
+	if (type_str == "aa")
+		type = User::Type::Admin;
+	else if (type_str == "fs")
+		type = User::Type::FullStandard;
+	else if (type_str == "bs")
+		type = User::Type::BuyStandard;
+	else if (type_str == "ss")
+		type = User::Type::SellStandard;
+	else
+	{
+		std::cout << "User type must be one of the following \n"
+		<< "aa - Admin\n"
+		<< "fs - Full Standard\n"
+		<< "bs - Buy Standard\n"
+		<< "ss - Sell Standard\n";
 		return;
 	}
 	
-	program->create_user(args[1]);
+	program->create_user(args[1], type);
 }
 
 void DeleteCommand::run(const std::vector<std::string> &args)
