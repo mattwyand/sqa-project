@@ -135,6 +135,7 @@
     <ClInclude Include="commands.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="program.h" />
+    <ClInclude Include="thirdparty\json.hpp" />
     <ClInclude Include="user.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>

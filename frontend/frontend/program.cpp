@@ -4,6 +4,7 @@
 #include "util.h"
 #include "game.h"
 
+#include "thirdparty/json.hpp"
 #include <iostream>
 #include <vector>
 
