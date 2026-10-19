@@ -227,6 +227,7 @@ void Program::create_user(const std::string &name, User::Type type)
 	{
 		auto new_user = std::make_unique<User>();
 		new_user->name = name;
+		new_user->type = type;
 		user_database.insert({new_user->name, std::move(new_user)});
 	}
 
@@ -380,7 +381,7 @@ void Program::read_database()
 void Program::write_database()
 {
 	// Write json data
-	std::ofstream f(data_path / "database_output.json");
+	std::ofstream f(data_path / DATABASE_FILENAME);
 	if (!f.is_open())
 	{
 		// Couldn't read json for some reason
@@ -450,10 +451,10 @@ void Program::build_command_list()
 	if (!logged_in)
 	{
 		push_command<LoginCommand>();
+		push_command<ExitCommand>();
 	}
 	else
 	{
-		push_command<LogoutCommand>();
 		push_command<ListGamesCommand>();
 
 		// Add admin commands to the list
@@ -463,9 +464,8 @@ void Program::build_command_list()
 			push_command<DeleteCommand>();
 			push_command<AddCreditCommand>();
 		}
+		push_command<LogoutCommand>();
 	}
-
-	push_command<ExitCommand>();
 }
 
 void Program::push_transaction_type1(const User *user, const std::string &transaction_code)

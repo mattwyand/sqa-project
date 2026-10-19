@@ -1,59 +1,65 @@
 {
-	"games": [
-		{
-			"name": "deadlock",
-			"description": "Valve's new moba shooter.",
-			"seller": "valve",
-			"price": 0.0
-		},
-		{
-			"name": "tf2",
-			"description": "Dead game.",
-			"seller": "valve",
-			"price": 0.0
-		},
-		{
-			"name": "super_jagua",
-			"description": "Super Jagua.",
-			"seller": "matthew",
-			"price": 99.99
-		}
-	],
-	"users": [
-		{
-			"name": "admin",
-			"type": "admin",
-			"wallet": 999999.0,
-			"owned_games": [
-				"__all__"
-			]
-		},
-		{
-			"name": "valve",
-			"type": "sell-standard",
-			"wallet": 50.0,
-			"owned_games": [
-				"deadlock",
-				"tf2"
-			]
-		},
-		{
-			"name": "sully",
-			"type": "buy-standard",
-			"wallet": 6666.66,
-			"owned_games": [
-				"deadlock"
-			]
-		},
-		{
-			"name": "matthew",
-			"type": "full-standard",
-			"wallet": 0.75,
-			"owned_games": [
-				"deadlock",
-				"tf2",
-				"super_jagua"
-			]
-		}
-	]
+    "games": [
+        {
+            "description": "Valve's new moba shooter.",
+            "name": "deadlock",
+            "price": 0.0,
+            "seller": "valve"
+        },
+        {
+            "description": "Dead game.",
+            "name": "tf2",
+            "price": 0.0,
+            "seller": "valve"
+        },
+        {
+            "description": "Super Jagua.",
+            "name": "super_jagua",
+            "price": 99.98999786376953,
+            "seller": "matthew"
+        }
+    ],
+    "users": [
+        {
+            "name": "sully",
+            "owned_games": [
+                "deadlock"
+            ],
+            "type": "buy-standard",
+            "wallet": 6666.66015625
+        },
+        {
+            "name": "admin",
+            "owned_games": [
+                "__all__"
+            ],
+            "type": "admin",
+            "wallet": 999999.0
+        },
+        {
+            "name": "super",
+            "owned_games": [],
+            "type": "admin",
+            "wallet": 2365.0
+        },
+        {
+            "name": "matthew",
+            "owned_games": [
+                "deadlock",
+                "tf2",
+                "super_jagua"
+            ],
+            "type": "full-standard",
+            "wallet": 0.75
+        },
+        {
+            "name": "valve",
+            "owned_games": [
+                "deadlock",
+                "tf2"
+            ],
+            "type": "sell-standard",
+            "wallet": 50.0
+        }
+    ]
 }
