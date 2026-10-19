@@ -7,12 +7,16 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
+#include <filesystem>
 
 // The main global state of the program
 
 class Program
 {
 private:
+	// Path to the "data" folder
+	std::filesystem::path data_path;
+
 	// User "database"
 	std::unordered_map<std::string, Game*> game_database{};
 	// Games "database"
@@ -27,6 +31,10 @@ private:
 	
 	std::vector<Command *> commands{};
 
+	// Find the "data" directory containing our "database"
+	void init_data_path();
+
+	// TODO: Will have to change once we get stuff reading in from JSON
 	// Initialize database of games in the store
 	void init_game_list();
 
@@ -52,6 +60,7 @@ public:
 
 	User *get_user(const std::string& name) const;
 	Game *get_game(const std::string& name) const;
+	const std::filesystem::path &get_data_path() const;
 
 	// -- Commands --
 	void list_owned_games();

@@ -4,12 +4,18 @@
 #include "util.h"
 #include "game.h"
 
-#include "thirdparty/json.hpp"
 #include <iostream>
 #include <vector>
 
+#include "thirdparty/json.hpp"
+#include <fstream>
+
+namespace fs = std::filesystem;
+using json = nlohmann::json;
+
 void Program::run()
 {
+	init_data_path();
 	init_game_list();
 	init_users_list();
 
@@ -98,6 +104,12 @@ Game *Program::get_game(const std::string& name) const
 	}
 }
 
+const std::filesystem::path &Program::get_data_path() const
+{
+	LB_ASSERT(data_path.string().size() > 0, "Data path has not been initialized.");
+	return data_path;
+}
+
 void Program::list_owned_games()
 {
 	for (auto& game : user->get_owned_games())
@@ -137,6 +149,28 @@ void Program::exit()
 {
 	exit_program = true;
 	std::cout << "Closing program...\n";
+}
+
+void Program::init_data_path()
+{
+	fs::path base_path = fs::current_path();
+	fs::path current_path;
+
+	// Start in our current path. Keep looking up until we find the data dir.
+	fs::path temp = base_path;
+	do
+	{
+		LB_ASSERT(temp.string().size() > 0, "Could not find data folder.");
+
+		current_path = temp / "data";
+		temp = temp.parent_path();
+	} while (!fs::is_directory(current_path));
+
+	// Append a slash to the end (weird syntax)
+	current_path /= "";
+
+	// We've found our data path
+	data_path = current_path;
 }
 
 void Program::init_game_list()
