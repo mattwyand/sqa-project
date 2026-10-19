@@ -42,3 +42,16 @@ void ExitCommand::run(const std::vector<std::string> &args)
 {
 	program->exit();
 }
+
+
+// -- Create --
+void CreateCommand::run(const std::vector<std::string> &args)
+{
+	if (args.size() < 2)
+	{
+		std::cout << "usage: [name]\n";
+		return;
+	}
+	
+	program->create_user(args[1]);
+}

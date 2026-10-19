@@ -23,6 +23,7 @@ private:
 	std::unordered_map<std::string, std::unique_ptr<User>> user_database{};
 
 	// Program state
+	bool is_admin_session = false;
 	bool logged_in = false;
 	bool exit_program = false;
 
@@ -65,6 +66,8 @@ public:
 
 	void login(const std::string &name);
 	void logout();
+	void create_user(const std::string &name);
+
 	void exit();
 };
 

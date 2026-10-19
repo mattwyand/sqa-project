@@ -160,13 +160,36 @@ void Program::login(const std::string& name)
 	if (user->get_name() == "admin")
 	{
 		std::cout << "Began Admin session. Privileged/unprivileged transactions are available.\n";
+		is_admin_session = true;
 	}
 }
 
 void Program::logout()
 {
 	logged_in = false;
+	is_admin_session = false;
 	user = nullptr;
+}
+
+void Program::create_user(const std::string &name)
+{
+	// Check if user exists
+	if (user_database.count(name))
+	{
+		std::cout << "Failed to create account: user '" << name << "' already exists.\n";
+		return;
+	}
+
+	{
+		auto new_user = std::make_unique<User>();
+		new_user->name = name;
+		user_database.insert({ new_user->name, std::move(new_user) });
+	}
+
+	std::cout << "Created new user '" << name << "'.\n";
+
+	// Save changes
+	write_database();
 }
 
 void Program::exit()
@@ -226,10 +249,10 @@ void Program::read_database()
 		LB_ASSERT(game["price"].is_number(),		"Game 'price' does not exist or is wrong type.");
 
 		auto g = std::make_unique<Game>();
-		g->name = game["name"];
-		g->description = game["description"];
-		g->seller_username = game["seller"];
-		g->price = game["price"];
+		g->name = game["name"].get<std::string>();
+		g->description = game["description"].get<std::string>();
+		g->seller_username = game["seller"].get<std::string>();
+		g->price = game["price"].get<float>();
 
 		game_database.insert({
 			g->name,
@@ -247,13 +270,13 @@ void Program::read_database()
 
 		// Create new user
 		std::unique_ptr<User> u = std::make_unique<User>();
-		u->name = user["name"];
+		u->name = user["name"].get<std::string>();
 
 		if (user.contains("owned_games"))
 		{
 			for (auto &game_name : user["owned_games"])
 			{
-				u->owned_games.push_back(game_name);
+				u->owned_games.push_back(game_name.get<std::string>());
 			}
 		}
 		user_database.insert({user["name"], std::move(u)});
@@ -337,6 +360,11 @@ void Program::build_command_list()
 	{
 		push_command<LogoutCommand>();
 		push_command<ListGamesCommand>();
+
+		if (is_admin_session)
+		{
+			push_command<CreateCommand>();
+		}
 	}
 
 	push_command<ExitCommand>();
