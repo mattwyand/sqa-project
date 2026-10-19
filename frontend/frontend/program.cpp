@@ -499,7 +499,7 @@ void Program::push_transaction_type1(const User *user, const std::string &transa
 	str += " ";
 
 	// Available credit
-	str += std::to_string(user->get_wallet_balance());
+	str += float_to_fmtstring(user->get_wallet_balance());
 	str += "\n";
 
 	transaction_log.push_back(str);

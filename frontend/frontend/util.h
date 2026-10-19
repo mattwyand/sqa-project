@@ -57,3 +57,6 @@ std::vector<std::string> split(const std::string &str, char delim);
 
 // Can this string be converted into a float?
 bool is_float(const std::string &str);
+
+// Convert float to string with 2 decimal point formatting
+std::string float_to_fmtstring(float f);
