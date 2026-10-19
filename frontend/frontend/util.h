@@ -3,7 +3,6 @@
 #include <vector>
 
 // -- Debug assert --
-// TODO: Move this to a more appropriate file...
 #ifdef _DEBUG
 
 #ifdef BUILD_PLATFORM_WINDOWS
