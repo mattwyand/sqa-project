@@ -11,11 +11,9 @@ class User
 
 private:
 	std::string name = "";
-	std::vector<Game*> owned_games{};
+	std::vector<std::string> owned_games{};
 
 public:
-	//Game(const std::string& name, const std::vector<Game*> &owned_games);
-	
 	inline const std::string get_name() const { return name; }
-	inline const std::vector<Game*>& get_owned_games() const { return owned_games; }
+	inline const std::vector<std::string>& get_owned_games() const { return owned_games; }
 };

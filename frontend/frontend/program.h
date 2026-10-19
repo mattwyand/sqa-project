@@ -18,9 +18,9 @@ private:
 	std::filesystem::path data_path;
 
 	// User "database"
-	std::unordered_map<std::string, Game*> game_database{};
+	std::unordered_map<std::string, std::unique_ptr<Game>> game_database{};
 	// Games "database"
-	std::unordered_map<std::string, User*> user_database{};
+	std::unordered_map<std::string, std::unique_ptr<User>> user_database{};
 
 	// Program state
 	bool logged_in = false;
@@ -34,12 +34,10 @@ private:
 	// Find the "data" directory containing our "database"
 	void init_data_path();
 
-	// TODO: Will have to change once we get stuff reading in from JSON
-	// Initialize database of games in the store
-	void init_game_list();
-
-	//  Initialize database of users
-	void init_users_list();
+	// Read data/database.json and construct database
+	void read_database();
+	// Write our database structures to json file
+	void write_database();
 
 	template <class T>
 	void push_command();
@@ -56,7 +54,7 @@ public:
 	void print_startup();
 
 	// Print commands in command list along with their descriptions
-	void print_mainmenu();
+	void print_main_menu();
 
 	User *get_user(const std::string& name) const;
 	Game *get_game(const std::string& name) const;

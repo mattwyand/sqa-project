@@ -4,7 +4,7 @@
 // Represents a game in the store / a user's library
 class Game
 {
-	friend Game get_game(const std::string& name);
+	friend class Program;
 
 private:
 	std::string name = "";
@@ -14,7 +14,7 @@ private:
 	float price = 0.0f;
 
 public:
-	Game(const std::string& name, const std::string& description, const std::string& seller_username, float price);
+	Game() = default;
 
 	inline const std::string get_name() const { return name; }
 	inline const std::string get_description() const { return description; }
