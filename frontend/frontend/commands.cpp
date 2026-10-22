@@ -45,6 +45,7 @@ void CreateCommand::run(const std::vector<std::string> &args)
 		return;
 	}
 
+	// Figure out which type of user to create 
 	const std::string &type_str = args[2];
 	User::Type type = User::Type::None;
 	if (type_str == "aa")
@@ -92,5 +93,6 @@ void AddCreditCommand::run(const std::vector<std::string> &args)
 		std::cout << "[amount] must be a number\n";
 		return;
 	}
+	
 	program->add_credit(args[1], std::stof(args[2]));
 }

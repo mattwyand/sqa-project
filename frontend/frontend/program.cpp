@@ -40,7 +40,7 @@ void Program::run()
 		std::string input;
 		std::getline(std::cin, input);
 
-		// TODO: strip input of whitespace
+		// @TODO: strip input of whitespace
 
 		// Transform to lowercase so input can be any case
 		input = to_lower_case(input);
@@ -320,7 +320,7 @@ void Program::read_database()
 	std::ifstream f(data_path / DATABASE_FILENAME);
 	if (!f.is_open())
 	{
-		// TODO: Create new database file
+		// @TODO: Create new database file
 		std::string error = "'" + data_path.string() + DATABASE_FILENAME + "' does not exist. Database cannot be populated.";
 		LB_ASSERT(false, error.c_str());
 		return;
