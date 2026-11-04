@@ -21,12 +21,10 @@
     ],
     "users": [
         {
-            "name": "sully",
-            "owned_games": [
-                "deadlock"
-            ],
-            "type": "buy-standard",
-            "wallet": 6666.66015625
+            "name": "super",
+            "owned_games": [],
+            "type": "admin",
+            "wallet": 2365.0
         },
         {
             "name": "admin",
@@ -37,10 +35,21 @@
             "wallet": 999999.0
         },
         {
-            "name": "super",
-            "owned_games": [],
-            "type": "admin",
-            "wallet": 2365.0
+            "name": "sully",
+            "owned_games": [
+                "deadlock"
+            ],
+            "type": "buy-standard",
+            "wallet": 6666.66015625
+        },
+        {
+            "name": "valve",
+            "owned_games": [
+                "deadlock",
+                "tf2"
+            ],
+            "type": "sell-standard",
+            "wallet": 50.0
         },
         {
             "name": "matthew",
@@ -51,15 +60,6 @@
             ],
             "type": "full-standard",
             "wallet": 0.75
-        },
-        {
-            "name": "valve",
-            "owned_games": [
-                "deadlock",
-                "tf2"
-            ],
-            "type": "sell-standard",
-            "wallet": 50.0
         }
     ]
 }
