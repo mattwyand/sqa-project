@@ -33,6 +33,7 @@ private:
 	// Active user
 	User *active_user;
 	
+	// List of available commands to the user
 	std::vector<Command *> commands{};
 
 	// Find the "data" directory containing our "database"
@@ -40,18 +41,25 @@ private:
 
 	// Read data/database.json and construct database
 	void read_database();
+	
 	// Write our database structures to json file
 	void write_database();
 
+	// Make a command available to the user
 	template <class T>
 	void push_command();
-	void clear_command();
+
+	// Clear all available commands from the list of available commands to the user
+	void clear_commands();
 
 	// Figure out what commands to show in the menu based on program state
 	void build_command_list();
 
 	// For create, delete, add credit, end of session
 	void push_transaction_type1(const User *user, const std::string &transaction_code);
+
+	// Write all transactions to disk and flush transaction_log list
+	void write_transaction_log();
 
 public:
 	// Start the program
@@ -63,20 +71,36 @@ public:
 	// Print commands in command list along with their descriptions
 	void print_main_menu();
 
+	// Get a user from the database based on their name. Returns nullptr if not found.
 	User *get_user(const std::string& name) const;
+
+	// Get a game from the database based on its name. Returns nullptr if not found.
 	Game *get_game(const std::string& name) const;
+
+	// Return the cached path to the "data" directory
 	const std::filesystem::path &get_data_path() const;
 
 	// -- Commands --
+	// List all of the current user's owned games
 	void list_owned_games();
 
+	// Log a user in and set as current user
 	void login(const std::string &name);
+
+	// Log a user out, clear current user
 	void logout();
+
+	// Exit the program
 	void exit();
 
-	// Admin commands
+	// -- Admin commands --
+	// Creates a new user
 	void create_user(const std::string &name, User::Type type);
+
+	// Deletes an existing user
 	void delete_user(const std::string &name);
+
+	// Add credit to an existing user's balance
 	void add_credit(const std::string &name, float amount);
 };
 

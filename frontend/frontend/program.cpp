@@ -14,9 +14,14 @@ using json = nlohmann::json;
 
 namespace
 {
+	// Current version of the program
+	const std::string PROGRAM_VERSION = "0.0.1";
+	
+	// Filepath constants
 	const std::string DATABASE_FILENAME = "database.json";
 	const std::string TRANSACTION_LOG_FILENAME = "transaction_log.txt";
 
+	// If a user has a game named this in their owned games, then they own ALL games
 	const std::string ALL_GAMES = "__all__";
 
 	constexpr int USERNAME_MAX_LENGTH = 15;
@@ -25,14 +30,18 @@ namespace
 
 void Program::run()
 {
+	// Initialize database
 	init_data_path();
 	read_database();
 	write_database();
 
+	// Show ascii logo art
 	print_startup();
 
+	// -- Main loop --
 	while (!exit_program)
 	{
+		// Figure out what commands to display and print them
 		build_command_list();
 		print_main_menu();
 
@@ -42,11 +51,13 @@ void Program::run()
 
 		// @TODO: strip input of whitespace
 
-		// Transform to lowercase so input can be any case
+		// Transform to lowercase so input can be case-agnostic
 		input = to_lower_case(input);
 
-		// See if we input one of the commands listed
+		// -- See if input matches one of the listed commands --
+		// Split input on space character
 		auto args = split(input, ' ');
+
 		if (args.size() > 0)
 		{
 			std::cout << "\n";
@@ -56,6 +67,7 @@ void Program::run()
 			{
 				if (args[0] == command->get_name())
 				{
+					// The user input a valid command -> pass input to its 'run' function
 					command->run(args);
 					found_command = true;
 					break;
@@ -79,7 +91,7 @@ void Program::print_startup()
 			  << "|  \\| |/ _ \\| __|___\\___ \\| __/ _ \\/ _` | '_ ` _ \\ \n"
 			  << "| |\\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |\n"
 			  << "|_| \\_|\\___/ \\__|   |____/ \\__\\___|\\__,_|_| |_| |_|\n";
-	std::cout << "Version 0.0.1\n\n\n";
+	std::cout << "Version " << PROGRAM_VERSION << "\n\n\n";
 }
 
 void Program::print_main_menu()
@@ -94,6 +106,7 @@ void Program::print_main_menu()
 		std::cout << "-- Menu --\n";
 	}
 
+	// Print available commands
 	for (Command *command : commands)
 	{
 		command->print_description();
@@ -104,24 +117,28 @@ void Program::print_main_menu()
 
 User *Program::get_user(const std::string &name) const
 {
+	// Only return user that exists
 	if (user_database.count(name))
 	{
 		return user_database.at(name).get();
 	}
 	else
 	{
+		// User not found
 		return nullptr;
 	}
 }
 
 Game *Program::get_game(const std::string &name) const
 {
+	// Only return game that exists
 	if (game_database.count(name))
 	{
 		return game_database.at(name).get();
 	}
 	else
 	{
+		// Game not found
 		return nullptr;
 	}
 }
@@ -184,28 +201,13 @@ void Program::login(const std::string &name)
 void Program::logout()
 {
 	push_transaction_type1(active_user, "00");
-	
+
+	// Clear active user
 	logged_in = false;
 	is_admin_session = false;
 	active_user = nullptr;
 
-	// Write transaction log
-	fs::path path = data_path / TRANSACTION_LOG_FILENAME;
-	std::ofstream f(path);
-
-	if (!f.is_open())
-	{
-		std::cout << "Error: Could not write to transaction log ('" << path.string() << "')\n";
-		return;
-	}
-
-	f << "--- Transaction log ---\n";
-	for (auto &line : transaction_log)
-	{
-		f << line;
-	}
-
-	f.close();
+	write_transaction_log();
 }
 
 void Program::create_user(const std::string &name, User::Type type)
@@ -434,7 +436,7 @@ void Program::write_database()
 	f.close();
 }
 
-void Program::clear_command()
+void Program::clear_commands()
 {
 	// Commands are heap allocated, so we need to free them here...
 	for (Command *c : commands)
@@ -446,7 +448,7 @@ void Program::clear_command()
 
 void Program::build_command_list()
 {
-	clear_command();
+	clear_commands();
 
 	if (!logged_in)
 	{
@@ -464,6 +466,7 @@ void Program::build_command_list()
 			push_command<DeleteCommand>();
 			push_command<AddCreditCommand>();
 		}
+		
 		push_command<LogoutCommand>();
 	}
 }
@@ -474,6 +477,7 @@ void Program::push_transaction_type1(const User *user, const std::string &transa
 	str += transaction_code + " " + user->get_name();
 
 	// Pad username
+	// @TODO: Isn't this not changing the string at all...?
 	for (int i = 0; i < USERNAME_MAX_LENGTH - user->get_name().size(); i++)
 		str += "";
 
@@ -503,4 +507,29 @@ void Program::push_transaction_type1(const User *user, const std::string &transa
 	str += "\n";
 
 	transaction_log.push_back(str);
+}
+
+void Program::write_transaction_log()
+{
+	fs::path path = data_path / TRANSACTION_LOG_FILENAME;
+	std::ofstream f(path);
+
+	if (!f.is_open())
+	{
+		// Failed to open the file stream
+		std::cout << "Error: Could not write to transaction log ('" << path.string() << "')\n";
+		return;
+	}
+
+	// Write file contents
+	f << "--- Transaction log ---\n";
+	for (auto &line : transaction_log)
+	{
+		f << line;
+	}
+
+	transaction_log.clear();
+	transaction_log.shrink_to_fit();
+
+	f.close();
 }
