@@ -12,20 +12,26 @@ protected:
 	std::string name, description;
 
 public:
+	// Set up private members
 	Command(Program *program, const char *name, const char *description)
 		: program(program), name(name), description(description) {}
 
 	virtual ~Command() = default;
 
+	// Print this command's description
 	void print_description();
-	virtual void run(const std::vector<std::string> &args) = 0;
 
+	// Get the name of this command
 	inline const std::string get_name() const { return name; }
+	
+	// Override to add behavior when running this command
+	virtual void run(const std::vector<std::string> &args) = 0;
 };
 
 
 /*
 login - start a Front End session
+
 	- Before processing a login transaction, the front end reads the current user accounts file.
 
 	- Should ask for the username.
@@ -45,6 +51,7 @@ public:
 
 /*
 logout - end a Front End session
+
 	- Should write out the daily transaction file and stop accepting any
 	  transactions except login.
 */
@@ -60,6 +67,7 @@ public:
 
 /*
 create - Creates a new user with buying and/or advertising privileges
+
 	- Should ask for the new username (as a text line)
 
 	- Then, should ask for the type of user (admin or full-standard,
@@ -79,6 +87,7 @@ public:
 
 /*
 delete - Cancel any games for sale and remove the user account
+
 	- Should ask for the username (as a text line)
 	
 	- Should save this information for the daily transaction file
@@ -95,6 +104,7 @@ public:
 
 /*
 sell - Put a game up for sale
+
 	- Should ask for the game name (as a text line)
 	
 	- Should ask for a price for the game in dollars (e.g. 15.00)
@@ -113,6 +123,7 @@ public:
 
 /*
 buy - purchase a game available for sale
+
 	- Should ask for game name and the seller's username
 
 	- Should add the new game to the user's collection
@@ -134,6 +145,7 @@ public:
 
 /*
 refund - Issue a credit to a buyer's account from a seller's account (privileged transaction)
+
 	- Should ask for the buyer's username, seller's username, and the amount of
 	  credit to transfer.
 
@@ -154,6 +166,7 @@ public:
 
 /*
 addcredit - Add credit into the system for the purchase of accounts
+
 	- In admin mode, should ask for the amount of credit to add and the
 	  username of the account to which the credit is being added
 
@@ -184,6 +197,7 @@ public:
 
 /*
 exit - exit the program
+
 NOTE: This might not be something we have to do
 */
 class ExitCommand : public Command

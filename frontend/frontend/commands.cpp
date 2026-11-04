@@ -45,24 +45,40 @@ void CreateCommand::run(const std::vector<std::string> &args)
 		return;
 	}
 
+	// Type string constants
+	const std::string admin_code 			= "aa";
+	const std::string full_standard_code 	= "fs";
+	const std::string buy_standard_code 	= "bs";
+	const std::string sell_standard_code 	= "ss";
+
 	// Figure out which type of user to create 
 	const std::string &type_str = args[2];
 	User::Type type = User::Type::None;
-	if (type_str == "aa")
+
+	if (type_str == admin_code)
+	{
 		type = User::Type::Admin;
-	else if (type_str == "fs")
+	}
+	else if (type_str == full_standard_code)
+	{
 		type = User::Type::FullStandard;
-	else if (type_str == "bs")
+	}
+	else if (type_str == buy_standard_code)
+	{
 		type = User::Type::BuyStandard;
-	else if (type_str == "ss")
+	}
+	else if (type_str == sell_standard_code)
+	{
 		type = User::Type::SellStandard;
+	}
 	else
 	{
+		// User entered invalid type...
 		std::cout << "User type must be one of the following \n"
-		<< "aa - Admin\n"
-		<< "fs - Full Standard\n"
-		<< "bs - Buy Standard\n"
-		<< "ss - Sell Standard\n";
+		<< admin_code << " - Admin\n"
+		<< full_standard_code << " - Full Standard\n"
+		<< buy_standard_code << " - Buy Standard\n"
+		<< sell_standard_code << " - Sell Standard\n";
 		return;
 	}
 	
