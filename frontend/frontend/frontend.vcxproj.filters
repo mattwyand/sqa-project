@@ -27,9 +27,6 @@
     <ClCompile Include="util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="user.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

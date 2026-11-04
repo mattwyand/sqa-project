@@ -125,7 +125,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="commands.cpp" />
-    <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="program.cpp" />
     <ClCompile Include="user.cpp" />
