@@ -24,8 +24,25 @@ namespace
 	// If a user has a game named this in their owned games, then they own ALL games
 	const std::string ALL_GAMES = "__all__";
 
-	constexpr int USERNAME_MAX_LENGTH = 15;
+	constexpr int MAX_USERNAME_LENGTH = 15; // @TODO - we might not need this
 	constexpr int MAX_CREDIT_DIGITS = 9;
+
+	// The fixed length of lines in the accounts file
+	constexpr int LINE_LENGTH_ACCOUNTS = 28;
+	// The fixed length of lines in the games file
+	constexpr int LINE_LENGTH_GAMES = 49;
+	// The fixed length of lines in the game collection file
+	constexpr int LINE_LENGTH_GAME_COLLECTION = 42;
+
+	// Return a username padded with spaces for transactions logs
+	std::string get_padded_username(const std::string &name)
+	{
+		std::string result = name;
+		for (int i = 0; i < MAX_USERNAME_LENGTH - name.size(); i++)
+			result += " ";
+
+		return result;
+	}
 }
 
 void Program::run()
@@ -200,7 +217,7 @@ void Program::login(const std::string &name)
 
 void Program::logout()
 {
-	push_transaction_type1(active_user, "00");
+	log_transaction_general(active_user, "00");
 
 	// Clear active user
 	logged_in = false;
@@ -220,9 +237,9 @@ void Program::create_user(const std::string &name, User::Type type)
 	}
 
 	// Can't be over certain length (because of transaction log)
-	if (name.size() > USERNAME_MAX_LENGTH)
+	if (name.size() > MAX_USERNAME_LENGTH)
 	{
-		std::cout << "Failed to create account: username '" << name << "' is too long (max length:" << USERNAME_MAX_LENGTH << ")\n";
+		std::cout << "Failed to create account: username '" << name << "' is too long (max length:" << MAX_USERNAME_LENGTH << ")\n";
 		return;
 	}
 
@@ -239,7 +256,7 @@ void Program::create_user(const std::string &name, User::Type type)
 	write_database();
 
 	// Transaction log
-	push_transaction_type1(get_user(name), "01");
+	log_transaction_general(get_user(name), "01");
 }
 
 void Program::delete_user(const std::string &name)
@@ -252,7 +269,7 @@ void Program::delete_user(const std::string &name)
 	}
 
 	// Transaction log
-	push_transaction_type1(get_user(name), "02");
+	log_transaction_general(get_user(name), "02");
 	
 	// Delete the user from the database
 	user_database.erase(name);
@@ -280,7 +297,7 @@ void Program::add_credit(const std::string &name, float amount)
 	write_database();
 
 	// Transaction log
-	push_transaction_type1(user, "06");
+	log_transaction_general(user, "06");
 
 	std::cout << "Added $" << amount << " to " << name << "'s wallet (new balance: $" << user->get_wallet_balance() << ")\n";
 }
@@ -471,19 +488,19 @@ void Program::build_command_list()
 	}
 }
 
-void Program::push_transaction_type1(const User *user, const std::string &transaction_code)
+void Program::log_transaction_general(const User *user, const std::string &transaction_code)
 {
 	std::string str = "";
-	str += transaction_code + " " + user->get_name();
 
-	// Pad username
-	// @TODO: Isn't this not changing the string at all...?
-	for (int i = 0; i < USERNAME_MAX_LENGTH - user->get_name().size(); i++)
-		str += "";
-
+	// Write transaction code
+	str += transaction_code;
 	str += " ";
 
-	// User type
+	// Write username
+	str += get_padded_username(user->get_name());
+	str += " ";
+
+	// Write user type
 	switch (active_user->type)
 	{
 	case User::Type::Admin:
@@ -499,12 +516,81 @@ void Program::push_transaction_type1(const User *user, const std::string &transa
 		str += "SS";
 		break;
 	}
-
 	str += " ";
 
-	// Available credit
+	// Write available credit
 	str += float_to_fmtstring(user->get_wallet_balance());
 	str += "\n";
+
+	transaction_log.push_back(str);
+}
+
+void Program::log_transaction_refund(const User *user, const Game *game)
+{
+	std::string str = "";
+
+	// Write transaction code (refund)
+	str += "05";
+	str += " ";
+
+	// Write buyer's username
+	str += get_padded_username(user->get_name());
+	str += " ";
+	
+	// Write seller's username
+	str += get_padded_username(game->get_seller_username());
+	str += " ";
+
+	// Write refund credit
+	str += float_to_fmtstring(game->get_price());
+
+	transaction_log.push_back(str);
+}
+
+void Program::log_transaction_sell(const Game *game)
+{
+	std::string str = "";
+
+	// Write transaction code (sell)
+	str += "03";
+	str += " ";
+
+	// Write game's name
+	str += game->get_name();
+	str += " ";
+	
+	// Write seller's username
+	str += get_padded_username(game->get_seller_username());
+	str += " ";
+
+	// Write game's price
+	str += float_to_fmtstring(game->get_price());
+
+	transaction_log.push_back(str);
+}
+
+void Program::log_transaction_buy(const User *user, const Game *game)
+{
+	std::string str = "";
+
+	// Write transaction code (buy)
+	str += "04";
+	str += " ";
+
+	// Write game's name
+	str += game->get_name();
+	str += " ";
+	
+	// Write seller's username
+	str += get_padded_username(game->get_seller_username());
+	str += " ";
+
+	// Write buyer's username
+	str += get_padded_username(user->get_name());
+	str += " ";
+
+	// Write game's price
+	str += float_to_fmtstring(game->get_price());
 
 	transaction_log.push_back(str);
 }

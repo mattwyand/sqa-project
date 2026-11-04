@@ -52,7 +52,6 @@ public:
 	// Get the user's wallet balance
 	inline const float get_wallet_balance() const { return wallet; }
 
-
 	// Static helper for converting User::Type to a string.
 	// User::Type::Admin; 			- "admin" 	
 	// User::Type::FullStandard; 	- "full-standard"

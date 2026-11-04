@@ -55,8 +55,17 @@ private:
 	// Figure out what commands to show in the menu based on program state
 	void build_command_list();
 
-	// For create, delete, add credit, end of session
-	void push_transaction_type1(const User *user, const std::string &transaction_code);
+	// Log a create, delete, add credit, or end of session
+	void log_transaction_general(const User *user, const std::string &transaction_code);
+
+	// Log a refund
+	void log_transaction_refund(const User *user, const Game *game);
+
+	// Log a sell
+	void log_transaction_sell(const Game *game);
+
+	// Log a buy
+	void log_transaction_buy(const User *user, const Game *game);
 
 	// Write all transactions to disk and flush transaction_log list
 	void write_transaction_log();
@@ -92,6 +101,11 @@ public:
 
 	// Exit the program
 	void exit();
+
+	// @TODO:
+	// void buy();
+	// void sell();
+	// void refund();
 
 	// -- Admin commands --
 	// Creates a new user

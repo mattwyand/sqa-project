@@ -2,8 +2,7 @@
 
 /*
 
-@TODO
-This is a big comment explaining exactly what the program does
+@TODO - Write a big comment explaining exactly what the program does
 
 */
 
