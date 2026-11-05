@@ -42,7 +42,10 @@ private:
 	// Read data/database.json and construct database
 	void read_database();
 	
-	// Write our database structures to json file
+	// @TODO: remove
+	// Write our database structures to json file (OLD)
+	void write_database_old();
+	
 	void write_database();
 
 	// Make a command available to the user

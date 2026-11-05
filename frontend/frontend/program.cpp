@@ -21,10 +21,16 @@ namespace
 	const std::string DATABASE_FILENAME = "database.json";
 	const std::string TRANSACTION_LOG_FILENAME = "transaction_log.txt";
 
+	const std::string ACCOUNTS_FILENAME = "accounts.txt";
+	const std::string AVAILABLE_GAMES_FILENAME = "games.txt";
+	const std::string GAMES_COLLECTION_FILENAME = "accounts.txt";
+
 	// If a user has a game named this in their owned games, then they own ALL games
 	const std::string ALL_GAMES = "__all__";
 
-	constexpr int MAX_USERNAME_LENGTH = 15; // @TODO - we might not need this
+	// Max length of a user name, as designated by the transaction log
+	constexpr int MAX_USERNAME_LENGTH = 15;
+	// Max number of credit digits, as designated by the transaction log
 	constexpr int MAX_CREDIT_DIGITS = 9;
 
 	// The fixed length of lines in the accounts file
@@ -39,9 +45,67 @@ namespace
 	{
 		std::string result = name;
 		for (int i = 0; i < MAX_USERNAME_LENGTH - name.size(); i++)
+		{
 			result += " ";
+		}
 
 		return result;
+	}
+
+	// Get 0-padded numeric value
+	std::string get_padded_credit(float credit)
+	{
+		std::string str = "";
+		
+		// -- Pad the beginning with 0's --
+
+		// NOTE: Add 2 because we're going to have 2 decimal points
+		int digit_count = count_digits(credit) + 2;
+		for (int i = 0; i < MAX_CREDIT_DIGITS - digit_count; i++)
+		{
+			str += "0";
+		}
+		
+		str += float_to_fmtstring(credit);
+		
+		return str;
+	}
+
+	// Convert User::Type to string to be used in files
+	std::string serialize_user_type(const User::Type type)
+	{
+		switch (type)
+		{
+		case User::Type::Admin:
+			return "AA";
+		case User::Type::FullStandard:
+			return "FS";
+		case User::Type::BuyStandard:
+			return "BS";
+		case User::Type::SellStandard:
+			return "SS";
+		}
+	}
+
+	// Convert user type string to User::Type from file
+	User::Type deserialize_user_type(const std::string &type_string)
+	{
+		if (type_string == "AA")
+		{
+			return User::Type::Admin;
+		}
+		else if (type_string == "FS")
+		{
+			return User::Type::FullStandard;
+		}
+		else if (type_string == "BS")
+		{
+			return User::Type::BuyStandard;
+		}
+		else if (type_string == "SS")
+		{
+			return User::Type::SellStandard;
+		}
 	}
 }
 
@@ -50,7 +114,7 @@ void Program::run()
 	// Initialize database
 	init_data_path();
 	read_database();
-	write_database();
+	write_database_old();
 
 	// Show ascii logo art
 	print_startup();
@@ -253,7 +317,7 @@ void Program::create_user(const std::string &name, User::Type type)
 	std::cout << "Created new user '" << name << "'.\n";
 
 	// Save changes
-	write_database();
+	write_database_old();
 
 	// Transaction log
 	log_transaction_general(get_user(name), "01");
@@ -277,7 +341,7 @@ void Program::delete_user(const std::string &name)
 	std::cout << "Deleted user '" << name << "'\n";
 
 	// Save changes
-	write_database();
+	write_database_old();
 }
 
 void Program::add_credit(const std::string &name, float amount)
@@ -294,7 +358,7 @@ void Program::add_credit(const std::string &name, float amount)
 	user->wallet += amount;
 
 	// Save changes
-	write_database();
+	write_database_old();
 
 	// Transaction log
 	log_transaction_general(user, "06");
@@ -397,7 +461,7 @@ void Program::read_database()
 	}
 }
 
-void Program::write_database()
+void Program::write_database_old()
 {
 	// Write json data
 	std::ofstream f(data_path / DATABASE_FILENAME);
@@ -453,6 +517,65 @@ void Program::write_database()
 	f.close();
 }
 
+void Program::write_database()
+{
+	// -- Write accounts --
+	{
+		std::ofstream f(data_path / ACCOUNTS_FILENAME);
+		if (!f.is_open())
+		{
+			// Couldn't open stream for reading
+			std::string error = "Could not open '" + data_path.string() + ACCOUNTS_FILENAME + "' for writing.";
+			LB_ASSERT(false, error.c_str());
+		}
+
+		for (auto &pair : user_database)
+		{
+			User *user = pair.second.get();
+			std::string line = "";
+
+			line += get_padded_username(user->get_name());
+			line += " ";
+
+			line += get_padded_credit(user->get_wallet_balance());
+			line += " ";
+			
+		}
+
+		// @TODO: File ends with special user named "END" with an empty user type and the credit field empty
+
+		
+		f.close();
+	}
+
+	// -- Write available games --
+	{
+		std::ofstream f(data_path / AVAILABLE_GAMES_FILENAME);
+		if (!f.is_open())
+		{
+			// Couldn't open stream for reading
+			std::string error = "Could not open '" + data_path.string() + AVAILABLE_GAMES_FILENAME + "' for writing.";
+			LB_ASSERT(false, error.c_str());
+		}
+
+		
+		f.close();
+	}
+
+	// -- Write games collection --
+	{
+		std::ofstream f(data_path / GAMES_COLLECTION_FILENAME);
+		if (!f.is_open())
+		{
+			// Couldn't open stream for reading
+			std::string error = "Could not open '" + data_path.string() + GAMES_COLLECTION_FILENAME + "' for writing.";
+			LB_ASSERT(false, error.c_str());
+		}
+		
+		f.close();
+	}
+}
+
 void Program::clear_commands()
 {
 	// Commands are heap allocated, so we need to free them here...
@@ -501,21 +624,7 @@ void Program::log_transaction_general(const User *user, const std::string &trans
 	str += " ";
 
 	// Write user type
-	switch (active_user->type)
-	{
-	case User::Type::Admin:
-		str += "AA";
-		break;
-	case User::Type::FullStandard:
-		str += "FS";
-		break;
-	case User::Type::BuyStandard:
-		str += "BS";
-		break;
-	case User::Type::SellStandard:
-		str += "SS";
-		break;
-	}
+	str += serialize_user_type(user->get_type());
 	str += " ";
 
 	// Write available credit

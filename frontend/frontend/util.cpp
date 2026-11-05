@@ -41,6 +41,18 @@ bool is_float(const std::string &str)
 	return ec == std::errc() && ptr == str.data() + str.size();
 }
 
+int count_digits(float number)
+{
+	int count = 0;
+	while (number >= 1)
+	{
+		number /= 10;
+		count++;
+	}
+	
+	return count;
+}
+
 std::string float_to_fmtstring(float f)
 {
 	// Use an ostringstream to truncate the precision of the float to 2 decimal points
