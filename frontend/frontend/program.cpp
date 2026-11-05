@@ -4,14 +4,12 @@
 #include "util.h"
 #include "game.h"
 
-#include "thirdparty/json.hpp"
 #include <iostream>
 #include <vector>
 #include <sstream>
 #include <fstream>
 
 namespace fs = std::filesystem;
-using json = nlohmann::json;
 
 namespace
 {
@@ -347,7 +345,7 @@ void Program::create_user(const std::string &name, User::Type type)
 	std::cout << "Created new user '" << name << "'.\n";
 
 	// Save changes
-	write_database_old();
+	write_database();
 
 	// Transaction log
 	log_transaction_general(get_user(name), "01");
@@ -371,7 +369,7 @@ void Program::delete_user(const std::string &name)
 	std::cout << "Deleted user '" << name << "'\n";
 
 	// Save changes
-	write_database_old();
+	write_database();
 }
 
 void Program::add_credit(const std::string &name, float amount)
@@ -388,7 +386,7 @@ void Program::add_credit(const std::string &name, float amount)
 	user->wallet += amount;
 
 	// Save changes
-	write_database_old();
+	write_database();
 
 	// Transaction log
 	log_transaction_general(user, "06");
@@ -422,75 +420,6 @@ void Program::init_data_path()
 
 	// We've found our data path
 	data_path = current_path;
-}
-
-void Program::read_database_old()
-{
-	read_database();
-	return;
-
-	game_database.clear();
-	user_database.clear();
-
-	// Read json data
-	std::ifstream f(data_path / DATABASE_FILENAME);
-	if (!f.is_open())
-	{
-		// @TODO: Create new database file
-		std::string error = "'" + data_path.string() + DATABASE_FILENAME + "' does not exist. Database cannot be populated.";
-		LB_ASSERT(false, error.c_str());
-		return;
-	}
-
-	json data = json::parse(f);
-	f.close();
-
-	// -- Games --
-	LB_ASSERT(data["games"].is_array(), "'games' list does not exist in database.");
-	for (auto &game : data["games"])
-	{
-		// Verify fields
-		LB_ASSERT(game["name"].is_string(), "Game 'name' does not exist or is wrong type.");
-		LB_ASSERT(game["description"].is_string(), "Game 'description' does not exist or is wrong type.");
-		LB_ASSERT(game["seller"].is_string(), "Game 'seller' does not exist or is wrong type.");
-		LB_ASSERT(game["price"].is_number(), "Game 'price' does not exist or is wrong type.");
-
-		auto g = std::make_unique<Game>();
-		g->name = game["name"].get<std::string>();
-		g->description = game["description"].get<std::string>();
-		g->seller_username = game["seller"].get<std::string>();
-		g->price = game["price"].get<float>();
-
-		game_database.insert({g->name, std::move(g)});
-	}
-
-	// -- Users --
-	LB_ASSERT(data["users"].is_array(), "'users' list does not exist in database.");
-	for (auto &user : data["users"])
-	{
-		// Verify fields
-		LB_ASSERT(user["name"].is_string(), "User 'name' does not exist or is wrong type.");
-		// LB_ASSERT(user["owned_games"].is_array(), "User's 'owned games' does not exist or is wrong type");
-
-		// Create new user
-		std::unique_ptr<User> u = std::make_unique<User>();
-
-		u->name = user["name"].get<std::string>();
-		u->wallet = user["wallet"].get<float>();
-		if (user.contains("owned_games"))
-		{
-			for (auto &game_name : user["owned_games"])
-			{
-				u->owned_games.push_back(game_name.get<std::string>());
-			}
-		}
-
-		// Get type
-		u->type = User::string_to_type(user["type"].get<std::string>());
-		LB_ASSERT(u->type != User::Type::None, "User is missing type.");
-
-		user_database.insert({user["name"], std::move(u)});
-	}
 }
 
 void Program::read_database()
@@ -616,62 +545,6 @@ void Program::read_database()
 
 		f.close();
 	}
-}
-
-void Program::write_database_old()
-{	
-	// Write json data
-	std::ofstream f(data_path / DATABASE_FILENAME);
-	if (!f.is_open())
-	{
-		// Couldn't read json for some reason
-		std::string error = "Could not open '" + data_path.string() + DATABASE_FILENAME + "'";
-		LB_ASSERT(false, error.c_str());
-		return;
-	}
-
-	json j;
-
-	// -- Write games --
-	{
-		auto game_objects = json::array();
-		for (auto &pair : game_database)
-		{
-			auto *game = pair.second.get();
-			game_objects.push_back(
-				{{"name", game->get_name()},
-				 {"description", game->get_description()},
-				 {"seller", game->get_seller_username()},
-				 {"price", game->get_price()}});
-		}
-		j["games"] = game_objects;
-	}
-
-	// -- Write users --
-	{
-		auto user_objects = json::array();
-		for (auto &pair : user_database)
-		{
-			User *user = pair.second.get();
-
-			// Owned games
-			auto owned_games = json::array();
-			for (auto &game_name : user->owned_games)
-			{
-				owned_games.push_back(game_name);
-			}
-
-			user_objects.push_back(
-				{{"name", user->name},
-				 {"type", User::type_to_string(user->type)},
-				 {"wallet", user->wallet},
-				 {"owned_games", owned_games}});
-		}
-		j["users"] = user_objects;
-	}
-
-	f << std::setw(4) << j << std::endl;
-	f.close();
 }
 
 void Program::write_database()

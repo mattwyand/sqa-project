@@ -39,15 +39,10 @@ private:
 	// Find the "data" directory containing our "database"
 	void init_data_path();
 
-	// @TODO: remove
-	// Read data/database.json and construct database
-	void read_database_old();
+	// Read the database
 	void read_database();
 	
-	// @TODO: remove
-	// Write our database structures to json file (OLD)
-	void write_database_old();
-	
+	// Write to the database	
 	void write_database();
 
 	// Make a command available to the user
