@@ -22,8 +22,8 @@ namespace
 	const std::string TRANSACTION_LOG_FILENAME = "transaction_log.txt";
 
 	const std::string ACCOUNTS_FILENAME = "accounts.txt";
-	const std::string AVAILABLE_GAMES_FILENAME = "games.txt";
-	const std::string GAMES_COLLECTION_FILENAME = "accounts.txt";
+	const std::string AVAILABLE_GAMES_FILENAME = "available_games.txt";
+	const std::string GAMES_COLLECTION_FILENAME = "games_collection.txt";
 
 	// If a user has a game named this in their owned games, then they own ALL games
 	const std::string ALL_GAMES = "__all__";
@@ -60,7 +60,7 @@ namespace
 		// -- Pad the beginning with 0's --
 
 		// NOTE: Add 2 because we're going to have 2 decimal points
-		int digit_count = count_digits(credit) + 2;
+		int digit_count = count_digits(credit) + 2; // @TODO: This causes inconsistent line lengths when credit < 1
 		for (int i = 0; i < MAX_CREDIT_DIGITS - digit_count; i++)
 		{
 			str += "0";
@@ -463,6 +463,8 @@ void Program::read_database()
 
 void Program::write_database_old()
 {
+	write_database();
+	
 	// Write json data
 	std::ofstream f(data_path / DATABASE_FILENAME);
 	if (!f.is_open())
@@ -538,12 +540,22 @@ void Program::write_database()
 			line += " ";
 
 			line += get_padded_credit(user->get_wallet_balance());
-			line += " ";
-			
+			line += "\n";
+
+			f << line;
 		}
 
 		// @TODO: File ends with special user named "END" with an empty user type and the credit field empty
+		{
+			std::string line = "";
 
+			line += get_padded_username("END");
+			line += " ";
+
+			line += get_padded_credit(0);
+
+			f << line;
+		}
 		
 		f.close();
 	}
