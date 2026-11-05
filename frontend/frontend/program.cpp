@@ -547,6 +547,8 @@ void Program::write_database_old()
 
 void Program::write_database()
 {
+	// @TODO: put some of the repeated code inside function that takes in params for line
+	
 	// -- Write accounts --
 	{
 		std::ofstream f(data_path / ACCOUNTS_FILENAME);
@@ -619,7 +621,22 @@ void Program::write_database()
 			line += zero_padded_price(game->get_price(), MAX_PRICE_DIGITS);
 
 			LB_ASSERT(line.size() == LINE_LENGTH_AVAILABLE_GAMES, "Available games line is not correct length.");
+			f << line << "\n";
+		}
 
+		// File ends with special game for sale named END with all other fields empty
+		{
+			std::string line = "";
+
+			line += space_padded_string("END", MAX_GAME_NAME_LENGTH);
+			line += " ";
+
+			line += space_padded_username("");
+			line += " ";
+
+			line += zero_padded_price(0, MAX_PRICE_DIGITS);
+
+			LB_ASSERT(line.size() == LINE_LENGTH_AVAILABLE_GAMES, "Available games line is not correct length.");
 			f << line << "\n";
 		}
 
@@ -634,6 +651,42 @@ void Program::write_database()
 			// Couldn't open stream for reading
 			std::string error = "Could not open '" + data_path.string() + GAMES_COLLECTION_FILENAME + "' for writing.";
 			LB_ASSERT(false, error.c_str());
+		}
+
+		for (auto &pair : user_database)
+		{
+			User *user = pair.second.get();
+			for (const std::string &game_name : user->get_owned_games())
+			{
+				Game *game = get_game(game_name);
+				if (!game)
+				{
+					continue;
+				}
+
+				std::string line = "";
+
+				line += space_padded_string(game->get_name(), MAX_GAME_NAME_LENGTH);
+				line += " ";
+
+				line += space_padded_username(user->get_name());
+
+				LB_ASSERT(line.size() == LINE_LENGTH_GAME_COLLECTION, "Games collection line is not correct length.");
+				f << line << "\n";
+			}
+		}
+
+		// File ends with a special game named END with all other fields empty
+		{
+			std::string line = "";
+
+			line += space_padded_string("", MAX_GAME_NAME_LENGTH);
+			line += " ";
+
+			line += space_padded_username("");
+
+			LB_ASSERT(line.size() == LINE_LENGTH_GAME_COLLECTION, "Games collection line is not correct length.");
+			f << line << "\n";
 		}
 		
 		f.close();
