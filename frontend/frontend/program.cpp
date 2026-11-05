@@ -31,7 +31,7 @@ namespace
 	// Max length of a user name, as designated by the transaction log
 	constexpr int MAX_USERNAME_LENGTH = 15;
 	// Max number of credit digits, as designated by the transaction log
-	constexpr int MAX_CREDIT_DIGITS = 9;
+	constexpr int MAX_CREDIT_DIGITS = 6;
 
 	// The fixed length of lines in the accounts file
 	constexpr int LINE_LENGTH_ACCOUNTS = 28;
@@ -58,10 +58,17 @@ namespace
 		std::string str = "";
 		
 		// -- Pad the beginning with 0's --
+		int digit_count = count_digits(credit) + 1; // '+1' to account for decimal char
+		int iterations = MAX_CREDIT_DIGITS - digit_count;
 
-		// NOTE: Add 2 because we're going to have 2 decimal points
-		int digit_count = count_digits(credit) + 2; // @TODO: This causes inconsistent line lengths when credit < 1
-		for (int i = 0; i < MAX_CREDIT_DIGITS - digit_count; i++)
+		// Fix edge case where a digit count of 1 or below caused line length to be 29 instead of 28
+		// because float_to_fmtstring wrote '0.xx'.
+		if (digit_count <= 1)
+		{
+			iterations -= 1;
+		}
+
+		for (int i = 0; i < iterations; i++)
 		{
 			str += "0";
 		}
@@ -538,6 +545,9 @@ void Program::write_database()
 
 			line += get_padded_username(user->get_name());
 			line += " ";
+			
+			line += serialize_user_type(user->get_type());
+			line += " ";
 
 			line += get_padded_credit(user->get_wallet_balance());
 			line += "\n";
@@ -550,6 +560,9 @@ void Program::write_database()
 			std::string line = "";
 
 			line += get_padded_username("END");
+			line += " ";
+
+			line += "  "; // Type
 			line += " ";
 
 			line += get_padded_credit(0);

@@ -1,7 +1,7 @@
 {
     "games": [
         {
-            "description": "Valve's new moba shooter.",
+            "description": "Valve's new MOBA shooter.",
             "name": "deadlock",
             "price": 0.0,
             "seller": "valve"
@@ -21,20 +21,6 @@
     ],
     "users": [
         {
-            "name": "super",
-            "owned_games": [],
-            "type": "admin",
-            "wallet": 2365.0
-        },
-        {
-            "name": "admin",
-            "owned_games": [
-                "__all__"
-            ],
-            "type": "admin",
-            "wallet": 999999.0
-        },
-        {
             "name": "sully",
             "owned_games": [
                 "deadlock"
@@ -43,13 +29,18 @@
             "wallet": 6666.66015625
         },
         {
-            "name": "valve",
+            "name": "admin",
             "owned_games": [
-                "deadlock",
-                "tf2"
+                "__all__"
             ],
-            "type": "sell-standard",
-            "wallet": 50.0
+            "type": "admin",
+            "wallet": 99999.0
+        },
+        {
+            "name": "super",
+            "owned_games": [],
+            "type": "admin",
+            "wallet": 2365.0
         },
         {
             "name": "matthew",
@@ -60,6 +51,15 @@
             ],
             "type": "full-standard",
             "wallet": 0.75
+        },
+        {
+            "name": "valve",
+            "owned_games": [
+                "deadlock",
+                "tf2"
+            ],
+            "type": "sell-standard",
+            "wallet": 50.0
         }
     ]
 }
