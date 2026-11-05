@@ -1,5 +1,11 @@
 #include "program.h"
 
+/*
+
+@TODO - Write a big comment explaining exactly what the program does
+
+*/
+
 int main()
 {
 	Program program;

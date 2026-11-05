@@ -1,0 +1,8 @@
+-- Frontend --
+- Remove json database
+- Add more comments to everything
+    - main.cpp needs a big comment documenting 
+        - Overall program intention
+        - Input and output files
+        - How the program is intended to be run
+    - EVERY method and member variable needs a comment
