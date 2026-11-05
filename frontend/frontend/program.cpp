@@ -30,21 +30,25 @@ namespace
 
 	// Max length of a user name, as designated by the transaction log
 	constexpr int MAX_USERNAME_LENGTH = 15;
+	// Max length of a game name, as designated by the transaction log
+	constexpr int MAX_GAME_NAME_LENGTH = 26;
 	// Max number of credit digits, as designated by the transaction log
-	constexpr int MAX_CREDIT_DIGITS = 6;
+	constexpr int MAX_CREDIT_DIGITS = 7;
+	// Max number of game price digits, as designated by the transaction log
+	constexpr int MAX_PRICE_DIGITS = 4;
 
 	// The fixed length of lines in the accounts file
 	constexpr int LINE_LENGTH_ACCOUNTS = 28;
 	// The fixed length of lines in the games file
-	constexpr int LINE_LENGTH_GAMES = 49;
+	constexpr int LINE_LENGTH_AVAILABLE_GAMES = 49;
 	// The fixed length of lines in the game collection file
 	constexpr int LINE_LENGTH_GAME_COLLECTION = 42;
 
-	// Return a username padded with spaces for transactions logs
-	std::string get_padded_username(const std::string &name)
+	// Return 'str' but padded to 'length' with spaces
+	std::string space_padded_string(const std::string &str, int length)
 	{
-		std::string result = name;
-		for (int i = 0; i < MAX_USERNAME_LENGTH - name.size(); i++)
+		std::string result = str;
+		for (int i = 0; i < length - str.size(); i++)
 		{
 			result += " ";
 		}
@@ -52,14 +56,20 @@ namespace
 		return result;
 	}
 
+	// Return a username padded with spaces for transactions logs
+	std::string space_padded_username(const std::string &name)
+	{
+		return space_padded_string(name, MAX_USERNAME_LENGTH);
+	}
+
 	// Get 0-padded numeric value
-	std::string get_padded_credit(float credit)
+	std::string zero_padded_price(float price, int length)
 	{
 		std::string str = "";
 		
 		// -- Pad the beginning with 0's --
-		int digit_count = count_digits(credit) + 1; // '+1' to account for decimal char
-		int iterations = MAX_CREDIT_DIGITS - digit_count;
+		int digit_count = count_digits(price) + 1; // '+1' to account for decimal char
+		int iterations = length - digit_count;
 
 		// Fix edge case where a digit count of 1 or below caused line length to be 29 instead of 28
 		// because float_to_fmtstring wrote '0.xx'.
@@ -73,9 +83,14 @@ namespace
 			str += "0";
 		}
 		
-		str += float_to_fmtstring(credit);
+		str += float_to_fmtstring(price);
 		
 		return str;
+	}
+
+	std::string zero_padded_credit(float credit)
+	{
+		return zero_padded_price(credit, MAX_CREDIT_DIGITS);
 	}
 
 	// Convert User::Type to string to be used in files
@@ -91,6 +106,10 @@ namespace
 			return "BS";
 		case User::Type::SellStandard:
 			return "SS";
+
+		default:
+			LB_ASSERT(false, "Not a valid user type.");
+			return "";
 		}
 	}
 
@@ -543,31 +562,34 @@ void Program::write_database()
 			User *user = pair.second.get();
 			std::string line = "";
 
-			line += get_padded_username(user->get_name());
+			line += space_padded_username(user->get_name());
 			line += " ";
 			
 			line += serialize_user_type(user->get_type());
 			line += " ";
 
-			line += get_padded_credit(user->get_wallet_balance());
-			line += "\n";
+			line += zero_padded_credit(user->get_wallet_balance());
 
-			f << line;
+			LB_ASSERT(line.size() == LINE_LENGTH_ACCOUNTS, "Accounts line is not correct length.");
+			
+			f << line << "\n";
 		}
 
-		// @TODO: File ends with special user named "END" with an empty user type and the credit field empty
+		// File ends with special user named "END" with an empty user type and the credit field empty
 		{
 			std::string line = "";
 
-			line += get_padded_username("END");
+			line += space_padded_username("END");
 			line += " ";
 
-			line += "  "; // Type
+			line += "  "; // Type (blank)
 			line += " ";
 
-			line += get_padded_credit(0);
+			line += zero_padded_credit(0);
 
-			f << line;
+			LB_ASSERT(line.size() == LINE_LENGTH_ACCOUNTS, "Accounts line is not correct length.");
+			
+			f << line << "\n";
 		}
 		
 		f.close();
@@ -583,7 +605,24 @@ void Program::write_database()
 			LB_ASSERT(false, error.c_str());
 		}
 
-		
+		for (auto &pair : game_database)
+		{
+			Game *game = pair.second.get();
+			std::string line = "";
+
+			line += space_padded_string(game->get_name(), MAX_GAME_NAME_LENGTH);
+			line += " ";
+
+			line += space_padded_username(game->get_seller_username());
+			line += " ";
+
+			line += zero_padded_price(game->get_price(), MAX_PRICE_DIGITS);
+
+			LB_ASSERT(line.size() == LINE_LENGTH_AVAILABLE_GAMES, "Available games line is not correct length.");
+
+			f << line << "\n";
+		}
+
 		f.close();
 	}
 
@@ -645,7 +684,7 @@ void Program::log_transaction_general(const User *user, const std::string &trans
 	str += " ";
 
 	// Write username
-	str += get_padded_username(user->get_name());
+	str += space_padded_username(user->get_name());
 	str += " ";
 
 	// Write user type
@@ -668,11 +707,11 @@ void Program::log_transaction_refund(const User *user, const Game *game)
 	str += " ";
 
 	// Write buyer's username
-	str += get_padded_username(user->get_name());
+	str += space_padded_username(user->get_name());
 	str += " ";
 	
 	// Write seller's username
-	str += get_padded_username(game->get_seller_username());
+	str += space_padded_username(game->get_seller_username());
 	str += " ";
 
 	// Write refund credit
@@ -694,7 +733,7 @@ void Program::log_transaction_sell(const Game *game)
 	str += " ";
 	
 	// Write seller's username
-	str += get_padded_username(game->get_seller_username());
+	str += space_padded_username(game->get_seller_username());
 	str += " ";
 
 	// Write game's price
@@ -716,11 +755,11 @@ void Program::log_transaction_buy(const User *user, const Game *game)
 	str += " ";
 	
 	// Write seller's username
-	str += get_padded_username(game->get_seller_username());
+	str += space_padded_username(game->get_seller_username());
 	str += " ";
 
 	// Write buyer's username
-	str += get_padded_username(user->get_name());
+	str += space_padded_username(user->get_name());
 	str += " ";
 
 	// Write game's price
