@@ -7,6 +7,7 @@
 #include "thirdparty/json.hpp"
 #include <iostream>
 #include <vector>
+#include <sstream>
 #include <fstream>
 
 namespace fs = std::filesystem;
@@ -132,6 +133,9 @@ namespace
 		{
 			return User::Type::SellStandard;
 		}
+
+		LB_ASSERT(false, "Not a valid user type string.");
+		return User::Type::None;
 	}
 }
 
@@ -140,7 +144,7 @@ void Program::run()
 	// Initialize database
 	init_data_path();
 	read_database();
-	write_database_old();
+	write_database();
 
 	// Show ascii logo art
 	print_startup();
@@ -420,8 +424,11 @@ void Program::init_data_path()
 	data_path = current_path;
 }
 
-void Program::read_database()
+void Program::read_database_old()
 {
+	read_database();
+	return;
+
 	game_database.clear();
 	user_database.clear();
 
@@ -454,8 +461,7 @@ void Program::read_database()
 		g->seller_username = game["seller"].get<std::string>();
 		g->price = game["price"].get<float>();
 
-		game_database.insert({g->name,
-							  std::move(g)});
+		game_database.insert({g->name, std::move(g)});
 	}
 
 	// -- Users --
@@ -487,10 +493,133 @@ void Program::read_database()
 	}
 }
 
-void Program::write_database_old()
+void Program::read_database()
 {
-	write_database();
-	
+	// @TODO: remove magic numbers from reading line substrings
+
+	if (!fs::exists(data_path / ACCOUNTS_FILENAME) ||
+		!fs::exists(data_path / AVAILABLE_GAMES_FILENAME) ||
+		!fs::exists(data_path / GAMES_COLLECTION_FILENAME))
+	{
+		// Database probably hasn't been created yet. Don't bother trying to read
+		return;
+	}
+
+	game_database.clear();
+	user_database.clear();
+
+	// -- Read accounts --
+	{
+		std::ifstream f(data_path / ACCOUNTS_FILENAME);
+		if (!f.is_open())
+		{
+			// Couldn't open stream for reading
+			std::string error = "Could not open '" + data_path.string() + ACCOUNTS_FILENAME + "' for reading.";
+			LB_ASSERT(false, error.c_str());
+		}
+
+		std::string line = "";
+		while (std::getline(f, line))
+		{
+			LB_ASSERT(line.size() == LINE_LENGTH_ACCOUNTS, "Accounts line is not correct size.");
+			
+			std::string name = line.substr(0, MAX_USERNAME_LENGTH);
+			std::string type = line.substr(16, 2);
+			std::string balance = line.substr(19, 9);
+
+			// Skip "end" entry
+			if (name.substr(0, 4) == "END ")
+			{
+				continue;
+			}
+
+			LB_ASSERT(is_float(balance), "User's balance is not a valid float.");
+
+			// Create a new user
+			std::unique_ptr<User> u = std::make_unique<User>();
+			u->name = name;
+			u->wallet = std::stof(balance);
+			u->type = deserialize_user_type(type);
+
+			user_database.insert({u->name, std::move(u)});
+		}
+		
+		f.close();
+	}
+
+	// -- Read available games --
+	{
+		std::ifstream f(data_path / AVAILABLE_GAMES_FILENAME);
+		if (!f.is_open())
+		{
+			// Couldn't open stream for reading
+			std::string error = "Could not open '" + data_path.string() + AVAILABLE_GAMES_FILENAME + "' for reading.";
+			LB_ASSERT(false, error.c_str());
+		}
+
+		std::string line = "";
+		while (std::getline(f, line))
+		{
+			LB_ASSERT(line.size() == LINE_LENGTH_AVAILABLE_GAMES, "Available games line is not correct size.");
+
+			std::string name = line.substr(0, MAX_GAME_NAME_LENGTH);
+			std::string seller_name = line.substr(27, 15);
+			std::string price = line.substr(44, 6);
+
+			// Skip "end" entry
+			if (name.substr(0, 4) == "END ")
+			{
+				continue;
+			}
+
+			LB_ASSERT(is_float(price), "Game price is not a valid float.");
+
+			auto g = std::make_unique<Game>();
+			g->name = name;
+			g->seller_username = seller_name;
+			g->price = std::stof(price);
+
+			game_database.insert({g->name, std::move(g)});
+		}
+
+		f.close();
+	}
+
+	// -- Read games collection --
+	{
+		std::ifstream f(data_path / GAMES_COLLECTION_FILENAME);
+		if (!f.is_open())
+		{
+			// Couldn't open stream for reading
+			std::string error = "Could not open '" + data_path.string() + GAMES_COLLECTION_FILENAME + "' for reading.";
+			LB_ASSERT(false, error.c_str());
+		}
+
+		std::string line = "";
+		while (std::getline(f, line))
+		{
+			LB_ASSERT(line.size() == LINE_LENGTH_GAME_COLLECTION, "Game collection line is not correct size.");
+
+			std::string game_name = line.substr(0, MAX_GAME_NAME_LENGTH);
+			std::string owner_name = line.substr(27, MAX_USERNAME_LENGTH);
+
+			// Skip "end" entry
+			if (game_name.substr(0, 4) == "END ")
+			{
+				continue;
+			}
+
+			User *user = get_user(owner_name);
+			LB_ASSERT(user, "Owner of game doesn't exist.");
+			user->owned_games.push_back(game_name);
+		}
+
+		f.close();
+	}
+}
+
+void Program::write_database_old()
+{	
 	// Write json data
 	std::ofstream f(data_path / DATABASE_FILENAME);
 	if (!f.is_open())
@@ -554,7 +683,7 @@ void Program::write_database()
 		std::ofstream f(data_path / ACCOUNTS_FILENAME);
 		if (!f.is_open())
 		{
-			// Couldn't open stream for reading
+			// Couldn't open stream for writing
 			std::string error = "Could not open '" + data_path.string() + ACCOUNTS_FILENAME + "' for writing.";
 			LB_ASSERT(false, error.c_str());
 		}
@@ -602,7 +731,7 @@ void Program::write_database()
 		std::ofstream f(data_path / AVAILABLE_GAMES_FILENAME);
 		if (!f.is_open())
 		{
-			// Couldn't open stream for reading
+			// Couldn't open stream for writing
 			std::string error = "Could not open '" + data_path.string() + AVAILABLE_GAMES_FILENAME + "' for writing.";
 			LB_ASSERT(false, error.c_str());
 		}
@@ -648,7 +777,7 @@ void Program::write_database()
 		std::ofstream f(data_path / GAMES_COLLECTION_FILENAME);
 		if (!f.is_open())
 		{
-			// Couldn't open stream for reading
+			// Couldn't open stream for writing
 			std::string error = "Could not open '" + data_path.string() + GAMES_COLLECTION_FILENAME + "' for writing.";
 			LB_ASSERT(false, error.c_str());
 		}
@@ -680,7 +809,7 @@ void Program::write_database()
 		{
 			std::string line = "";
 
-			line += space_padded_string("", MAX_GAME_NAME_LENGTH);
+			line += space_padded_string("END", MAX_GAME_NAME_LENGTH);
 			line += " ";
 
 			line += space_padded_username("");
