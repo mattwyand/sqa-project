@@ -17,9 +17,9 @@ private:
 	// Path to the "data" folder
 	std::filesystem::path data_path;
 
-	// User "database"
-	std::unordered_map<std::string, std::unique_ptr<Game>> game_database{};
 	// Games "database"
+	std::unordered_map<std::string, std::unique_ptr<Game>> game_database{};
+	// User "database"
 	std::unordered_map<std::string, std::unique_ptr<User>> user_database{};
 
 	// Transaction log
