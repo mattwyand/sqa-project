@@ -1,0 +1,686 @@
+checking outputs of test 37_addcredit_standard_valid
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1,2
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 06 buyer           BS 000100.00
+      > 00 buyer           BS 000600.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,5c4,5
+      < Error: unknown transaction 'addcredit'.
+      < Error: unknown transaction '100.00'.
+      ---
+      > Enter amount:
+      > Added $100.00 to buyer. New balance: $600.00.
+checking outputs of test 38_addcredit_admin_valid_target
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,3c1,2
+      < --- Transaction log ---
+      < 06 buyer           BS 600.00
+      < 00 admin           AA 1000.00
+      ---
+      > 06 buyer           BS 000100.00
+      > 00 admin           AA 001000.00
+checking outputs of test 39_addcredit_admin_invalid_target
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 admin           AA 1000.00
+      ---
+      > 00 admin           AA 001000.00
+checking outputs of test 40_addcredit_1000_boundary
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1,2
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 06 buyer           BS 001000.00
+      > 00 buyer           BS 001500.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,5c4,5
+      < Error: unknown transaction 'addcredit'.
+      < Error: unknown transaction '1000.00'.
+      ---
+      > Enter amount:
+      > Added $1000.00 to buyer. New balance: $1500.00.
+checking outputs of test 41_addcredit_over_1000_single
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 00 buyer           BS 000500.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,5c4,5
+      < Error: unknown transaction 'addcredit'.
+      < Error: unknown transaction '1000.01'.
+      ---
+      > Enter amount:
+      > Error: a maximum of $1000.00 can be added to an account per session.
+checking outputs of test 42_addcredit_over_1000_cumulative
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1,3
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 06 buyer           BS 000600.00
+      > 06 buyer           BS 000400.00
+      > 00 buyer           BS 001500.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,9c4,9
+      < Error: unknown transaction 'addcredit'.
+      < Error: unknown transaction '600.00'.
+      < Error: unknown transaction 'addcredit'.
+      < Error: unknown transaction '400.00'.
+      < Error: unknown transaction 'addcredit'.
+      < Error: unknown transaction '0.01'.
+      ---
+      > Enter amount:
+      > Added $600.00 to buyer. New balance: $1100.00.
+      > Enter amount:
+      > Added $400.00 to buyer. New balance: $1500.00.
+      > Enter amount:
+      > Error: a maximum of $1000.00 can be added to an account per session.
+checking outputs of test 45_unknown_transaction
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 00 buyer           BS 000500.00
+checking outputs of test 46_sell_non_numeric_price
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 seller          SS 100.00
+      ---
+      > 00 seller          SS 000100.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,6c4,6
+      < Error: unknown transaction 'sell'.
+      < Error: unknown transaction 'Bad Price Game'.
+      < Error: unknown transaction 'abc'.
+      ---
+      > Enter game name:
+      > Enter price:
+      > Error: price must be a number.
+checking outputs of test 47_refund_non_numeric_amount
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 admin           AA 1000.00
+      ---
+      > 00 admin           AA 001000.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,7c4,7
+      < Error: unknown transaction 'refund'.
+      < Error: unknown transaction 'buyer'.
+      < Error: unknown transaction 'seller'.
+      < Error: unknown transaction 'five'.
+      ---
+      > Enter buyer username:
+      > Enter seller username:
+      > Enter refund amount:
+      > Error: amount must be a number.
+checking outputs of test 48_addcredit_non_numeric_amount
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 00 buyer           BS 000500.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,5c4,5
+      < Error: unknown transaction 'addcredit'.
+      < Error: unknown transaction 'money'.
+      ---
+      > Enter amount:
+      > Error: amount must be a number.
+checking outputs of test 27_buy_valid_game
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1,2
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 04 Portal 2                   seller          buyer           020.00
+      > 00 buyer           BS 000480.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,6c4,6
+      < Error: unknown transaction 'buy'.
+      < Error: unknown transaction 'Portal 2'.
+      < Error: unknown transaction 'seller'.
+      ---
+      > Enter game name:
+      > Enter seller username:
+      > Purchased 'Portal 2' from seller for $20.00.
+checking outputs of test 28_buy_sell_standard_rejected
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 seller          SS 100.00
+      ---
+      > 00 seller          SS 000100.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4c4
+      < Error: unknown transaction 'buy'.
+      ---
+      > Error: sell-standard accounts cannot buy games.
+checking outputs of test 29_buy_nonexistent_game
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 00 buyer           BS 000500.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,6c4,6
+      < Error: unknown transaction 'buy'.
+      < Error: unknown transaction 'No Such Game'.
+      < Error: unknown transaction 'seller'.
+      ---
+      > Enter game name:
+      > Enter seller username:
+      > Error: game 'No Such Game' is not available from seller 'seller'.
+checking outputs of test 30_buy_insufficient_credit
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 lowcredit       BS 5.00
+      ---
+      > 00 lowcredit       BS 000005.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,6c4,6
+      < Error: unknown transaction 'buy'.
+      < Error: unknown transaction 'Expensive Game'.
+      < Error: unknown transaction 'seller'.
+      ---
+      > Enter game name:
+      > Enter seller username:
+      > Error: insufficient credit to buy 'Expensive Game'.
+checking outputs of test 31_buy_already_owned_game
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 00 buyer           BS 000500.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,6c4,6
+      < Error: unknown transaction 'buy'.
+      < Error: unknown transaction 'Owned Game'.
+      < Error: unknown transaction 'seller'.
+      ---
+      > Enter game name:
+      > Enter seller username:
+      > Error: you already own 'Owned Game'.
+checking outputs of test 08_create_valid_user
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,3c1,2
+      < --- Transaction log ---
+      < 01 newuser         FS 0.00
+      < 00 admin           AA 1000.00
+      ---
+      > 01 newuser         FS 000000.00
+      > 00 admin           AA 001000.00
+checking outputs of test 09_create_each_user_type
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,6c1,5
+      < --- Transaction log ---
+      < 01 newadmin        AA 0.00
+      < 01 newfull         FS 0.00
+      < 01 newbuyer        BS 0.00
+      < 01 newseller       SS 0.00
+      < 00 admin           AA 1000.00
+      ---
+      > 01 newadmin        AA 000000.00
+      > 01 newfull         FS 000000.00
+      > 01 newbuyer        BS 000000.00
+      > 01 newseller       SS 000000.00
+      > 00 admin           AA 001000.00
+checking outputs of test 10_create_non_admin_rejected
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 fulluser        FS 250.00
+      ---
+      > 00 fulluser        FS 000250.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4c4
+      < Error: unknown transaction 'create'.
+      ---
+      > Error: create is a privileged transaction.
+checking outputs of test 11_create_duplicate_username
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 admin           AA 1000.00
+      ---
+      > 00 admin           AA 001000.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      5d4
+      < Enter user type (AA, FS, BS, SS):
+      6a6
+      > Error: unknown transaction 'FS'.
+checking outputs of test 12_create_username_too_long
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 admin           AA 1000.00
+      ---
+      > 00 admin           AA 001000.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      5d4
+      < Enter user type (AA, FS, BS, SS):
+      6a6
+      > Error: unknown transaction 'FS'.
+checking outputs of test 13_create_username_length_boundary
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,3c1,2
+      < --- Transaction log ---
+      < 01 abcdefghijklmno FS 0.00
+      < 00 admin           AA 1000.00
+      ---
+      > 01 abcdefghijklmno FS 000000.00
+      > 00 admin           AA 001000.00
+checking outputs of test 14_delete_valid_user
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,3c1,2
+      < --- Transaction log ---
+      < 02 fulluser        FS 250.00
+      < 00 admin           AA 1000.00
+      ---
+      > 02 fulluser        FS 000250.00
+      > 00 admin           AA 001000.00
+checking outputs of test 15_delete_non_admin_rejected
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 fulluser        FS 250.00
+      ---
+      > 00 fulluser        FS 000250.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4c4
+      < Error: unknown transaction 'delete'.
+      ---
+      > Error: delete is a privileged transaction.
+checking outputs of test 16_delete_nonexistent_user
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 admin           AA 1000.00
+      ---
+      > 00 admin           AA 001000.00
+checking outputs of test 17_delete_current_user_rejected
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      5,8c5,6
+      < User 'admin' deleted.
+      < terminate called after throwing an instance of 'std::length_error'
+      <   what():  basic_string::_M_create
+      < *** program ended abnormally (exit status 134) ***
+      ---
+      > Error: you cannot delete the current user.
+      > Logged out.
+checking outputs of test 18_deleted_seller_inventory_unavailable
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,3c1,2
+      < --- Transaction log ---
+      < 02 seller          SS 100.00
+      < 00 admin           AA 1000.00
+      ---
+      > 02 seller          SS 000100.00
+      > 00 admin           AA 001000.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      6,8c6,8
+      < Error: unknown transaction 'buy'.
+      < Error: unknown transaction 'Portal 2'.
+      < Error: unknown transaction 'seller'.
+      ---
+      > Enter game name:
+      > Enter seller username:
+      > Error: game 'Portal 2' is not available from seller 'seller'.
+checking outputs of test 43_list_available_games
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 00 buyer           BS 000500.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,8c4,7
+      < buyer's games:
+      < "Owned Game" - 
+      < Seller: seller
+      < Price: $10
+      < 
+      ---
+      > Games available for sale:
+      > Portal 2 | seller | $20.00
+      > Expensive Game | seller | $999.99
+      > Owned Game | seller | $10.00
+checking outputs of test 44_list_before_login_rejected
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 00 buyer           BS 000500.00
+checking outputs of test 01_valid_admin_login
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 admin           AA 1000.00
+      ---
+      > 00 admin           AA 001000.00
+checking outputs of test 02_valid_standard_login
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 fulluser        FS 250.00
+      ---
+      > 00 fulluser        FS 000250.00
+checking outputs of test 03_invalid_username_login
+  PASS
+checking outputs of test 04_transaction_before_login
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 00 buyer           BS 000500.00
+checking outputs of test 05_second_login_rejected
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 admin           AA 1000.00
+      ---
+      > 00 admin           AA 001000.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4c4
+      < Error: unknown transaction 'login'.
+      ---
+      > Error: already logged in.
+checking outputs of test 06_logout_without_login
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 00 buyer           BS 000500.00
+checking outputs of test 07_only_login_after_logout
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1,2
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 00 buyer           BS 000500.00
+      > 00 buyer           BS 000500.00
+checking outputs of test 32_refund_valid
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1,2
+      < --- Transaction log ---
+      < 00 admin           AA 1000.00
+      ---
+      > 05 buyer           seller          000005.00
+      > 00 admin           AA 001000.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,7c4,7
+      < Error: unknown transaction 'refund'.
+      < Error: unknown transaction 'buyer'.
+      < Error: unknown transaction 'seller'.
+      < Error: unknown transaction '5.00'.
+      ---
+      > Enter buyer username:
+      > Enter seller username:
+      > Enter refund amount:
+      > Refunded $5.00 from seller to buyer.
+checking outputs of test 33_refund_non_admin_rejected
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 fulluser        FS 250.00
+      ---
+      > 00 fulluser        FS 000250.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4c4
+      < Error: unknown transaction 'refund'.
+      ---
+      > Error: refund is a privileged transaction.
+checking outputs of test 34_refund_missing_buyer
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 admin           AA 1000.00
+      ---
+      > 00 admin           AA 001000.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,7c4,7
+      < Error: unknown transaction 'refund'.
+      < Error: unknown transaction 'ghostbuyer'.
+      < Error: unknown transaction 'seller'.
+      < Error: unknown transaction '5.00'.
+      ---
+      > Enter buyer username:
+      > Enter seller username:
+      > Enter refund amount:
+      > Error: buyer 'ghostbuyer' does not exist.
+checking outputs of test 35_refund_missing_seller
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 admin           AA 1000.00
+      ---
+      > 00 admin           AA 001000.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,7c4,7
+      < Error: unknown transaction 'refund'.
+      < Error: unknown transaction 'buyer'.
+      < Error: unknown transaction 'ghostseller'.
+      < Error: unknown transaction '5.00'.
+      ---
+      > Enter buyer username:
+      > Enter seller username:
+      > Enter refund amount:
+      > Error: seller 'ghostseller' does not exist.
+checking outputs of test 36_refund_over_seller_balance_requirement_gap
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 admin           AA 1000.00
+      ---
+      > 00 admin           AA 001000.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,7c4,7
+      < Error: unknown transaction 'refund'.
+      < Error: unknown transaction 'buyer'.
+      < Error: unknown transaction 'seller'.
+      < Error: unknown transaction '999999.00'.
+      ---
+      > Enter buyer username:
+      > Enter seller username:
+      > Enter refund amount:
+      > Error: seller 'seller' does not have enough credit for this refund.
+checking outputs of test 19_sell_valid_game
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1,2
+      < --- Transaction log ---
+      < 00 seller          SS 100.00
+      ---
+      > 03 New Game                   seller          015.00
+      > 00 seller          SS 000100.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,6c4,6
+      < Error: unknown transaction 'sell'.
+      < Error: unknown transaction 'New Game'.
+      < Error: unknown transaction '15.00'.
+      ---
+      > Enter game name:
+      > Enter price:
+      > Game 'New Game' listed for sale at $15.00.
+checking outputs of test 20_sell_buy_standard_rejected
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 00 buyer           BS 000500.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4c4
+      < Error: unknown transaction 'sell'.
+      ---
+      > Error: buy-standard accounts cannot sell games.
+checking outputs of test 21_sell_price_max_boundary
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1,2
+      < --- Transaction log ---
+      < 00 seller          SS 100.00
+      ---
+      > 03 Max Price Game             seller          999.99
+      > 00 seller          SS 000100.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,6c4,6
+      < Error: unknown transaction 'sell'.
+      < Error: unknown transaction 'Max Price Game'.
+      < Error: unknown transaction '999.99'.
+      ---
+      > Enter game name:
+      > Enter price:
+      > Game 'Max Price Game' listed for sale at $999.99.
+checking outputs of test 22_sell_price_over_max
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 seller          SS 100.00
+      ---
+      > 00 seller          SS 000100.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,6c4,6
+      < Error: unknown transaction 'sell'.
+      < Error: unknown transaction 'Too Expensive'.
+      < Error: unknown transaction '1000.00'.
+      ---
+      > Enter game name:
+      > Enter price:
+      > Error: price must be between 0.00 and 999.99.
+checking outputs of test 23_sell_game_name_25_chars
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1,2
+      < --- Transaction log ---
+      < 00 seller          SS 100.00
+      ---
+      > 03 ABCDEFGHIJKLMNOPQRSTUVWXY  seller          025.00
+      > 00 seller          SS 000100.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,6c4,6
+      < Error: unknown transaction 'sell'.
+      < Error: unknown transaction 'ABCDEFGHIJKLMNOPQRSTUVWXY'.
+      < Error: unknown transaction '25.00'.
+      ---
+      > Enter game name:
+      > Enter price:
+      > Game 'ABCDEFGHIJKLMNOPQRSTUVWXY' listed for sale at $25.00.
+checking outputs of test 24_sell_game_name_too_long
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 seller          SS 100.00
+      ---
+      > 00 seller          SS 000100.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,5c4,5
+      < Error: unknown transaction 'sell'.
+      < Error: unknown transaction 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.
+      ---
+      > Enter game name:
+      > Error: game name must be 1 to 25 characters.
+checking outputs of test 25_sell_duplicate_game_name
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1
+      < --- Transaction log ---
+      < 00 seller          SS 100.00
+      ---
+      > 00 seller          SS 000100.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,5c4,5
+      < Error: unknown transaction 'sell'.
+      < Error: unknown transaction 'Portal 2'.
+      ---
+      > Enter game name:
+      > Error: a game named 'Portal 2' already exists.
+checking outputs of test 26_new_sale_not_usable_same_session
+  [transaction file] FAIL - differences (< actual, > expected):
+      1,2c1,3
+      < --- Transaction log ---
+      < 00 buyer           BS 500.00
+      ---
+      > 03 Fresh Game                 seller          010.00
+      > 00 seller          SS 000100.00
+      > 00 buyer           BS 000500.00
+  [terminal output]  FAIL - differences (< actual, > expected):
+      4,6c4,6
+      < Error: unknown transaction 'sell'.
+      < Error: unknown transaction 'Fresh Game'.
+      < Error: unknown transaction '10.00'.
+      ---
+      > Enter game name:
+      > Enter price:
+      > Game 'Fresh Game' listed for sale at $10.00.
+      10,12c10,12
+      < Error: unknown transaction 'buy'.
+      < Error: unknown transaction 'Fresh Game'.
+      < Error: unknown transaction 'seller'.
+      ---
+      > Enter game name:
+      > Enter seller username:
+      > Error: game 'Fresh Game' is not available from seller 'seller'.
+
+================ SUMMARY ================
+Passed: 1   Failed: 47
+  FAILED: 37_addcredit_standard_valid
+  FAILED: 38_addcredit_admin_valid_target
+  FAILED: 39_addcredit_admin_invalid_target
+  FAILED: 40_addcredit_1000_boundary
+  FAILED: 41_addcredit_over_1000_single
+  FAILED: 42_addcredit_over_1000_cumulative
+  FAILED: 45_unknown_transaction
+  FAILED: 46_sell_non_numeric_price
+  FAILED: 47_refund_non_numeric_amount
+  FAILED: 48_addcredit_non_numeric_amount
+  FAILED: 27_buy_valid_game
+  FAILED: 28_buy_sell_standard_rejected
+  FAILED: 29_buy_nonexistent_game
+  FAILED: 30_buy_insufficient_credit
+  FAILED: 31_buy_already_owned_game
+  FAILED: 08_create_valid_user
+  FAILED: 09_create_each_user_type
+  FAILED: 10_create_non_admin_rejected
+  FAILED: 11_create_duplicate_username
+  FAILED: 12_create_username_too_long
+  FAILED: 13_create_username_length_boundary
+  FAILED: 14_delete_valid_user
+  FAILED: 15_delete_non_admin_rejected
+  FAILED: 16_delete_nonexistent_user
+  FAILED: 17_delete_current_user_rejected
+  FAILED: 18_deleted_seller_inventory_unavailable
+  FAILED: 43_list_available_games
+  FAILED: 44_list_before_login_rejected
+  FAILED: 01_valid_admin_login
+  FAILED: 02_valid_standard_login
+  FAILED: 04_transaction_before_login
+  FAILED: 05_second_login_rejected
+  FAILED: 06_logout_without_login
+  FAILED: 07_only_login_after_logout
+  FAILED: 32_refund_valid
+  FAILED: 33_refund_non_admin_rejected
+  FAILED: 34_refund_missing_buyer
+  FAILED: 35_refund_missing_seller
+  FAILED: 36_refund_over_seller_balance_requirement_gap
+  FAILED: 19_sell_valid_game
+  FAILED: 20_sell_buy_standard_rejected
+  FAILED: 21_sell_price_max_boundary
+  FAILED: 22_sell_price_over_max
+  FAILED: 23_sell_game_name_25_chars
+  FAILED: 24_sell_game_name_too_long
+  FAILED: 25_sell_duplicate_game_name
+  FAILED: 26_new_sale_not_usable_same_session

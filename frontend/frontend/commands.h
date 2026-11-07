@@ -1,210 +1,141 @@
 #pragma once
 #include <string>
-#include <vector>
 
 class Program;
 
-// Base class for all commands in the program
+/*
+Base class for every transaction code the Front End accepts.
+
+Each command handles the user-interface side of one transaction: it checks whether the
+logged-in user may perform it, prompts for the extra lines of input it needs, and then
+asks the Program to apply the transaction. All data rules (unique names, balances,
+limits, ...) are checked by the Program.
+*/
 class Command
 {
 protected:
+	// The program state this command acts on
 	Program *program;
-	std::string name, description;
+	// The transaction code typed by the user to run this command, e.g. "login"
+	std::string name;
 
 public:
-	// Set up private members
-	Command(Program *program, const char *name, const char *description)
-		: program(program), name(name), description(description) {}
+	Command(Program *program, const char *name)
+		: program(program), name(name) {}
 
 	virtual ~Command() = default;
 
-	// Print this command's description
-	void print_description();
+	// Get the transaction code of this command
+	inline const std::string &get_name() const { return name; }
 
-	// Get the name of this command
-	inline const std::string get_name() const { return name; }
-	
-	// Override to add behavior when running this command
-	virtual void run(const std::vector<std::string> &args) = 0;
+	// Run the transaction. Called only after the main loop has matched the code.
+	virtual void run() = 0;
 };
-
 
 /*
 login - start a Front End session
-
-	- Before processing a login transaction, the front end reads the current user accounts file.
-
-	- Should ask for the username.
-
-	- After the username is accepted, reads in the available games file,
-	  and begins accepting transactions.
- */
+	- asks for the username
+	- rejected if a user is already logged in
+*/
 class LoginCommand : public Command
 {
 public:
-	LoginCommand(Program *program)
-		: Command(program, "login", "log into your account") {}
-	
-	void run(const std::vector<std::string> &args) override;
+	LoginCommand(Program *program) : Command(program, "login") {}
+	void run() override;
 };
-
 
 /*
 logout - end a Front End session
-
-	- Should write out the daily transaction file and stop accepting any
-	  transactions except login.
+	- writes out the daily transaction file
+	- after this, only login is accepted
 */
 class LogoutCommand : public Command
 {
 public:
-	LogoutCommand(Program *program)
-		: Command(program, "logout", "log out of your account") {}
-
-	void run(const std::vector<std::string> &args) override;
+	LogoutCommand(Program *program) : Command(program, "logout") {}
+	void run() override;
 };
 
-
 /*
-create - Creates a new user with buying and/or advertising privileges
-
-	- Should ask for the new username (as a text line)
-
-	- Then, should ask for the type of user (admin or full-standard,
-	  buy-standard, sell-standard)
-
-	- Should save this information to the daily transaction file
+create - add a new user (privileged: admin only)
+	- asks for the new username, then the account type (AA, FS, BS, SS)
+	- username must be 1-15 characters and not already in use
 */
 class CreateCommand : public Command
 {
 public:
-	CreateCommand(Program* program)
-		: Command(program, "create", "Add a user with the ability to buy/sell games.") {}
-		
-	void run(const std::vector<std::string> &args) override;
+	CreateCommand(Program *program) : Command(program, "create") {}
+	void run() override;
 };
 
-
 /*
-delete - Cancel any games for sale and remove the user account
-
-	- Should ask for the username (as a text line)
-	
-	- Should save this information for the daily transaction file
+delete - remove a user and cancel their games for sale (privileged: admin only)
+	- asks for the username
+	- the user must exist and must not be the current user
 */
 class DeleteCommand : public Command
 {
 public:
-	DeleteCommand(Program *program)
-		: Command(program, "delete", "Remove a user.") {}
-
-	void run(const std::vector<std::string> &args) override;
+	DeleteCommand(Program *program) : Command(program, "delete") {}
+	void run() override;
 };
 
-
 /*
-sell - Put a game up for sale
-
-	- Should ask for the game name (as a text line)
-	
-	- Should ask for a price for the game in dollars (e.g. 15.00)
-
-	- Should save this information to the daily transaction file
+sell - put a game up for sale (not allowed for buy-standard accounts)
+	- asks for the game name, then the price
+	- name must be 1-25 characters and unique; price must be 0.00 to 999.99
+	- the new game cannot be bought until the next session
 */
 class SellCommand : public Command
 {
 public:
-	SellCommand(Program *program)
-		: Command(program, "sell", "Put a game up for sale.") {}
-		
-	void run(const std::vector<std::string> &args) override;
+	SellCommand(Program *program) : Command(program, "sell") {}
+	void run() override;
 };
 
-
 /*
-buy - purchase a game available for sale
-
-	- Should ask for game name and the seller's username
-
-	- Should add the new game to the user's collection
-	
-	- Should credit the seller with an amount equal to the game's price
-	  and deduct that amount from the buyer
-
-	- Should save this information to the daily transaction file
+buy - purchase a game that is for sale (not allowed for sell-standard accounts)
+	- asks for the game name, then the seller's username
+	- the buyer must have enough credit and must not already own the game
 */
 class BuyCommand : public Command
 {
 public:
-	BuyCommand(Program *program)
-		: Command(program, "buy", "Purchase a game available for sale.") {}
-
-	void run(const std::vector<std::string> &args) override;
+	BuyCommand(Program *program) : Command(program, "buy") {}
+	void run() override;
 };
 
-
 /*
-refund - Issue a credit to a buyer's account from a seller's account (privileged transaction)
-
-	- Should ask for the buyer's username, seller's username, and the amount of
-	  credit to transfer.
-
-	- Should transfer the specified amount of credit from the seller's credit balance
-	  to the buyer's credit balance
-	
-	- Should save this information for the daily transaction file
+refund - move credit from a seller back to a buyer (privileged: admin only)
+	- asks for the buyer's username, the seller's username, and the amount
+	- both users must exist and the seller must have enough credit
 */
 class RefundCommand : public Command
 {
 public:
-	RefundCommand(Program *program)
-		: Command(program, "refund", "Issue a credit to a buyer's account from a seller's account") {}
-
-	void run(const std::vector<std::string> &args) override;
+	RefundCommand(Program *program) : Command(program, "refund") {}
+	void run() override;
 };
 
-
 /*
-addcredit - Add credit into the system for the purchase of accounts
-
-	- In admin mode, should ask for the amount of credit to add and the
-	  username of the account to which the credit is being added
-
-	- In a standard account, should ask for the amount of credit
-
-	- Should save this information to the daily transaction file
+addcredit - add credit to an account
+	- asks for the amount; an admin is then also asked for the username to credit,
+	  a standard user always credits their own account
+	- at most $1000.00 can be added to one account in a session
 */
 class AddCreditCommand : public Command
 {
 public:
-	AddCreditCommand(Program *program)
-		: Command(program, "addcredit", "Add credit to user.") {}
-
-	void run(const std::vector<std::string> &args) override;
+	AddCreditCommand(Program *program) : Command(program, "addcredit") {}
+	void run() override;
 };
-
-
-// NOTE: This might not be something we have to do?
-class ListGamesCommand : public Command
-{
-public:
-	ListGamesCommand(Program* program)
-		: Command(program, "list", "List your owned games.") {}
-
-	void run(const std::vector<std::string> &args) override;
-};
-
 
 /*
-exit - exit the program
-
-NOTE: This might not be something we have to do
+list - print every game currently available for sale (any logged-in user)
 */
-class ExitCommand : public Command
+class ListCommand : public Command
 {
 public:
-	ExitCommand(Program *program)
-		: Command(program, "exit", "exit the program") {}
-
-	void run(const std::vector<std::string> &args) override;
+	ListCommand(Program *program) : Command(program, "list") {}
+	void run() override;
 };

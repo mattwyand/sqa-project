@@ -1,0 +1,99 @@
+checking outputs of test 37_addcredit_standard_valid
+  PASS
+checking outputs of test 38_addcredit_admin_valid_target
+  PASS
+checking outputs of test 39_addcredit_admin_invalid_target
+  PASS
+checking outputs of test 40_addcredit_1000_boundary
+  PASS
+checking outputs of test 41_addcredit_over_1000_single
+  PASS
+checking outputs of test 42_addcredit_over_1000_cumulative
+  PASS
+checking outputs of test 45_unknown_transaction
+  PASS
+checking outputs of test 46_sell_non_numeric_price
+  PASS
+checking outputs of test 47_refund_non_numeric_amount
+  PASS
+checking outputs of test 48_addcredit_non_numeric_amount
+  PASS
+checking outputs of test 27_buy_valid_game
+  PASS
+checking outputs of test 28_buy_sell_standard_rejected
+  PASS
+checking outputs of test 29_buy_nonexistent_game
+  PASS
+checking outputs of test 30_buy_insufficient_credit
+  PASS
+checking outputs of test 31_buy_already_owned_game
+  PASS
+checking outputs of test 08_create_valid_user
+  PASS
+checking outputs of test 09_create_each_user_type
+  PASS
+checking outputs of test 10_create_non_admin_rejected
+  PASS
+checking outputs of test 11_create_duplicate_username
+  PASS
+checking outputs of test 12_create_username_too_long
+  PASS
+checking outputs of test 13_create_username_length_boundary
+  PASS
+checking outputs of test 14_delete_valid_user
+  PASS
+checking outputs of test 15_delete_non_admin_rejected
+  PASS
+checking outputs of test 16_delete_nonexistent_user
+  PASS
+checking outputs of test 17_delete_current_user_rejected
+  PASS
+checking outputs of test 18_deleted_seller_inventory_unavailable
+  PASS
+checking outputs of test 43_list_available_games
+  PASS
+checking outputs of test 44_list_before_login_rejected
+  PASS
+checking outputs of test 01_valid_admin_login
+  PASS
+checking outputs of test 02_valid_standard_login
+  PASS
+checking outputs of test 03_invalid_username_login
+  PASS
+checking outputs of test 04_transaction_before_login
+  PASS
+checking outputs of test 05_second_login_rejected
+  PASS
+checking outputs of test 06_logout_without_login
+  PASS
+checking outputs of test 07_only_login_after_logout
+  PASS
+checking outputs of test 32_refund_valid
+  PASS
+checking outputs of test 33_refund_non_admin_rejected
+  PASS
+checking outputs of test 34_refund_missing_buyer
+  PASS
+checking outputs of test 35_refund_missing_seller
+  PASS
+checking outputs of test 36_refund_over_seller_balance_requirement_gap
+  PASS
+checking outputs of test 19_sell_valid_game
+  PASS
+checking outputs of test 20_sell_buy_standard_rejected
+  PASS
+checking outputs of test 21_sell_price_max_boundary
+  PASS
+checking outputs of test 22_sell_price_over_max
+  PASS
+checking outputs of test 23_sell_game_name_25_chars
+  PASS
+checking outputs of test 24_sell_game_name_too_long
+  PASS
+checking outputs of test 25_sell_duplicate_game_name
+  PASS
+checking outputs of test 26_new_sale_not_usable_same_session
+  PASS
+
+================ SUMMARY ================
+Passed: 48   Failed: 0

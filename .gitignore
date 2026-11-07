@@ -71,3 +71,10 @@ Testing/
 
 out
 build
+
+# --- Phase 3 testing ---
+# Compiled Front End (built by run_tests.sh)
+distribution-system
+# Keep the test terminal-output files (the "*.out" rule above would ignore them)
+!TestCases/**/*.out
+.vs/

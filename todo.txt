@@ -1,8 +1,5 @@
 -- Frontend --
-- Remove json database
-- Add more comments to everything
-    - main.cpp needs a big comment documenting 
-        - Overall program intention
-        - Input and output files
-        - How the program is intended to be run
-    - EVERY method and member variable needs a comment
+- [done] Remove json database
+- [done] Comments on every class, method and member variable
+- [done] main.cpp header comment (intention, input/output files, how to run)
+- [done] Phase 3: command-line arguments, real expected outputs (.out/.etf), test scripts, all 48 tests passing

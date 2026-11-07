@@ -1,0 +1,10 @@
+Welcome to the Game Distribution System.
+Enter username:
+Logged in as buyer.
+Enter amount:
+Added $600.00 to buyer. New balance: $1100.00.
+Enter amount:
+Added $400.00 to buyer. New balance: $1500.00.
+Enter amount:
+Error: a maximum of $1000.00 can be added to an account per session.
+Logged out.

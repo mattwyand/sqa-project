@@ -1,2 +1,0 @@
-Sell succeeds.
-A sell transaction (03) is written with game name 'New Game', seller 'seller', and price 15.00.

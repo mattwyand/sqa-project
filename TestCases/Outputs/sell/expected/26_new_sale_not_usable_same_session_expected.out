@@ -1,0 +1,13 @@
+Welcome to the Game Distribution System.
+Enter username:
+Logged in as seller.
+Enter game name:
+Enter price:
+Game 'Fresh Game' listed for sale at $10.00.
+Logged out.
+Enter username:
+Logged in as buyer.
+Enter game name:
+Enter seller username:
+Error: game 'Fresh Game' is not available from seller 'seller'.
+Logged out.

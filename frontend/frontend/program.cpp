@@ -2,847 +2,501 @@
 
 #include "commands.h"
 #include "util.h"
-#include "game.h"
 
-#include <iostream>
-#include <vector>
+#include <algorithm>
 #include <fstream>
-
-namespace fs = std::filesystem;
+#include <iostream>
 
 namespace
 {
-	// Current version of the program
-	const std::string PROGRAM_VERSION = "0.0.1";
-	
-	// Filepath constants
-	const std::string DATABASE_FILENAME = "database.json";
-	const std::string TRANSACTION_LOG_FILENAME = "transaction_log.txt";
+	// Field widths from the requirements (file formats)
+	constexpr int USERNAME_WIDTH = 15;   // UUUUUUUUUUUUUUU
+	constexpr int GAME_NAME_WIDTH = 26;  // game name field in the games files
+	constexpr int CREDIT_WIDTH = 9;      // CCCCCCCCC, e.g. 000500.00
+	constexpr int PRICE_WIDTH = 6;       // PPPPPP, e.g. 020.00
 
-	const std::string ACCOUNTS_FILENAME = "accounts.txt";
-	const std::string AVAILABLE_GAMES_FILENAME = "available_games.txt";
-	const std::string GAMES_COLLECTION_FILENAME = "games_collection.txt";
+	// Limits from the requirements
+	constexpr int MAX_GAME_NAME_LENGTH = 25;
+	constexpr long long MAX_PRICE_CENTS = 99999;              // $999.99
+	constexpr long long MAX_CREDIT_PER_SESSION_CENTS = 100000; // $1000.00
+	constexpr long long MAX_BALANCE_CENTS = 99999999;         // $999999.99 (largest 9-char credit field)
 
-	// If a user has a game named this in their owned games, then they own ALL games
-	const std::string ALL_GAMES = "__all__";
+	// Fixed line lengths of the input files
+	constexpr size_t ACCOUNTS_LINE_LENGTH = 28;
+	constexpr size_t AVAILABLE_GAMES_LINE_LENGTH = 49;
+	constexpr size_t COLLECTION_LINE_LENGTH = 42;
 
-	// Max length of a user name, as designated by the transaction log
-	constexpr int MAX_USERNAME_LENGTH = 15;
-	// Max length of a game name, as designated by the transaction log
-	constexpr int MAX_GAME_NAME_LENGTH = 26;
-	// Max number of credit digits, as designated by the transaction log
-	constexpr int MAX_CREDIT_DIGITS = 7;
-	// Max number of game price digits, as designated by the transaction log
-	constexpr int MAX_PRICE_DIGITS = 4;
-
-	// The fixed length of lines in the accounts file
-	constexpr int LINE_LENGTH_ACCOUNTS = 28;
-	// The fixed length of lines in the games file
-	constexpr int LINE_LENGTH_AVAILABLE_GAMES = 49;
-	// The fixed length of lines in the game collection file
-	constexpr int LINE_LENGTH_GAME_COLLECTION = 42;
-
-	// Return 'str' but padded to 'length' with spaces
-	std::string space_padded_string(const std::string &str, int length)
-	{
-		std::string result = str;
-		for (int i = 0; i < length - str.size(); i++)
-		{
-			result += " ";
-		}
-
-		return result;
-	}
-
-	// Return a username padded with spaces for transactions logs
-	std::string space_padded_username(const std::string &name)
-	{
-		return space_padded_string(name, MAX_USERNAME_LENGTH);
-	}
-
-	// Get 0-padded numeric value
-	std::string zero_padded_price(float price, int length)
-	{
-		std::string str = "";
-		
-		// -- Pad the beginning with 0's --
-		int digit_count = count_digits(price) + 1; // '+1' to account for decimal char
-		int iterations = length - digit_count;
-
-		// Fix edge case where a digit count of 1 or below caused line length to be 29 instead of 28
-		// because float_to_fmtstring wrote '0.xx'.
-		if (digit_count <= 1)
-		{
-			iterations -= 1;
-		}
-
-		for (int i = 0; i < iterations; i++)
-		{
-			str += "0";
-		}
-		
-		str += float_to_fmtstring(price);
-		
-		return str;
-	}
-
-	std::string zero_padded_credit(float credit)
-	{
-		return zero_padded_price(credit, MAX_CREDIT_DIGITS);
-	}
-
-	// Convert User::Type to string to be used in files
-	std::string serialize_user_type(const User::Type type)
-	{
-		switch (type)
-		{
-		case User::Type::Admin:
-			return "AA";
-		case User::Type::FullStandard:
-			return "FS";
-		case User::Type::BuyStandard:
-			return "BS";
-		case User::Type::SellStandard:
-			return "SS";
-
-		default:
-			LB_ASSERT(false, "Not a valid user type.");
-			return "";
-		}
-	}
-
-	// Convert user type string to User::Type from file
-	User::Type deserialize_user_type(const std::string &type_string)
-	{
-		if (type_string == "AA")
-		{
-			return User::Type::Admin;
-		}
-		else if (type_string == "FS")
-		{
-			return User::Type::FullStandard;
-		}
-		else if (type_string == "BS")
-		{
-			return User::Type::BuyStandard;
-		}
-		else if (type_string == "SS")
-		{
-			return User::Type::SellStandard;
-		}
-
-		LB_ASSERT(false, "Not a valid user type string.");
-		return User::Type::None;
-	}
+	// Name used on the last line of every input file
+	const std::string END_MARKER = "END";
 }
 
-void Program::run()
+// ---------------------------------------------------------------------------
+// Main loop and input
+// ---------------------------------------------------------------------------
+
+void Program::run(const std::string &accounts_file, const std::string &games_file,
+				  const std::string &collection_file, const std::string &transaction_file)
 {
-	// Initialize database
-	init_data_path();
-	read_database();
-	write_database();
+	accounts_path = accounts_file;
+	available_games_path = games_file;
+	games_collection_path = collection_file;
+	transaction_path = transaction_file;
 
-	// Show ascii logo art
-	print_startup();
+	// Every transaction code the Front End understands
+	commands.push_back(std::make_unique<LoginCommand>(this));
+	commands.push_back(std::make_unique<LogoutCommand>(this));
+	commands.push_back(std::make_unique<CreateCommand>(this));
+	commands.push_back(std::make_unique<DeleteCommand>(this));
+	commands.push_back(std::make_unique<SellCommand>(this));
+	commands.push_back(std::make_unique<BuyCommand>(this));
+	commands.push_back(std::make_unique<RefundCommand>(this));
+	commands.push_back(std::make_unique<AddCreditCommand>(this));
+	commands.push_back(std::make_unique<ListCommand>(this));
 
-	// -- Main loop --
-	while (!exit_program)
+	std::cout << "Welcome to the Game Distribution System.\n";
+
+	// One transaction code per line, until the input ends
+	std::string line;
+	while (std::getline(std::cin, line))
 	{
-		// Figure out what commands to display and print them
-		build_command_list();
-		print_main_menu();
+		std::string input = trim(line);
+		if (input.empty())
+			continue; // ignore blank lines
 
-		// Get input
-		std::string input;
-		std::getline(std::cin, input);
-
-		// @TODO: strip input of whitespace
-
-		// Transform to lowercase so input can be case-agnostic
-		input = to_lower_case(input);
-
-		// -- See if input matches one of the listed commands --
-		// Split input on space character
-		auto args = split(input, ' ');
-
-		if (args.size() > 0)
+		// Before login, only "login" is accepted
+		std::string code = to_lower_case(input);
+		if (!logged_in && code != "login")
 		{
-			std::cout << "\n";
-
-			bool found_command = false;
-			for (Command *command : commands)
-			{
-				if (args[0] == command->get_name())
-				{
-					// The user input a valid command -> pass input to its 'run' function
-					command->run(args);
-					found_command = true;
-					break;
-				}
-			}
-
-			if (!found_command)
-			{
-				std::cout << "'" << args[0] << "' is not an available command.\n";
-			}
-		}
-
-		std::cout << "\n";
-	}
-}
-
-void Program::print_startup()
-{
-	std::cout << " _   _       _       ____  _                       \n"
-			  << "| \\ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___\n"
-			  << "|  \\| |/ _ \\| __|___\\___ \\| __/ _ \\/ _` | '_ ` _ \\ \n"
-			  << "| |\\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |\n"
-			  << "|_| \\_|\\___/ \\__|   |____/ \\__\\___|\\__,_|_| |_| |_|\n";
-	std::cout << "Version " << PROGRAM_VERSION << "\n\n\n";
-}
-
-void Program::print_main_menu()
-{
-	if (logged_in)
-	{
-		// Print username in menu header if we're logged in
-		std::cout << "-- Menu (" << active_user->get_name() << ") --\n";
-	}
-	else
-	{
-		std::cout << "-- Menu --\n";
-	}
-
-	// Print available commands
-	for (Command *command : commands)
-	{
-		command->print_description();
-	}
-
-	std::cout << "\n>";
-}
-
-User *Program::get_user(const std::string &name) const
-{
-	// Only return user that exists
-	if (user_database.count(name))
-	{
-		return user_database.at(name).get();
-	}
-	else
-	{
-		// User not found
-		return nullptr;
-	}
-}
-
-Game *Program::get_game(const std::string &name) const
-{
-	// Only return game that exists
-	if (game_database.count(name))
-	{
-		return game_database.at(name).get();
-	}
-	else
-	{
-		// Game not found
-		return nullptr;
-	}
-}
-
-const std::filesystem::path &Program::get_data_path() const
-{
-	LB_ASSERT(data_path.string().size() > 0, "Data path has not been initialized.");
-	return data_path;
-}
-
-void Program::list_owned_games()
-{
-	std::cout << active_user->get_name() << "'s games:\n";
-
-	for (auto &game_name : active_user->get_owned_games())
-	{
-		// List all games if we encounter the special ALL_GAMES tag
-		if (game_name == ALL_GAMES)
-		{
-			for (auto &pair : game_database)
-			{
-				Game *g = pair.second.get();
-				std::cout << "\"" << g->get_name() << "\" - " << g->get_description() << "\n"
-						  << "Seller: " << g->get_seller_username() << "\n"
-						  << "Price: $" << g->get_price() << "\n\n";
-			}
+			std::cout << "Error: you must log in first.\n";
 			continue;
 		}
 
-		Game *game = get_game(game_name);
-		if (!game)
-			continue;
-
-		std::cout << "\"" << game->get_name() << "\" - " << game->get_description() << "\n"
-				  << "Seller: " << game->get_seller_username() << "\n"
-				  << "Price: $" << game->get_price() << "\n\n";
+		auto match = std::find_if(commands.begin(), commands.end(),
+								  [&](const std::unique_ptr<Command> &c) { return c->get_name() == code; });
+		if (match == commands.end())
+			std::cout << "Error: unknown transaction '" << input << "'.\n";
+		else
+			(*match)->run();
 	}
 }
+
+std::string Program::prompt(const std::string &message)
+{
+	std::cout << message << "\n";
+	std::string line;
+	if (!std::getline(std::cin, line))
+		return ""; // no more input
+	return trim(line);
+}
+
+std::string Program::active_user_name() const
+{
+	return active_user ? active_user->get_name() : "";
+}
+
+User::Type Program::active_user_type() const
+{
+	return active_user ? active_user->get_type() : User::Type::None;
+}
+
+// ---------------------------------------------------------------------------
+// Reading the input files
+// ---------------------------------------------------------------------------
+
+bool Program::read_input_files()
+{
+	users.clear();
+	available_games.clear();
+
+	// -- Current user accounts: UUUUUUUUUUUUUUU TT CCCCCCCCC --
+	std::ifstream accounts_file(accounts_path);
+	if (!accounts_file)
+	{
+		std::cout << "Error: could not open accounts file '" << accounts_path << "'.\n";
+		return false;
+	}
+	std::string line;
+	while (std::getline(accounts_file, line))
+	{
+		if (!line.empty() && line.back() == '\r')
+			line.pop_back(); // tolerate Windows line endings
+		if (line.size() != ACCOUNTS_LINE_LENGTH)
+			continue; // skip badly formed lines instead of crashing
+
+		std::string name = trim(line.substr(0, USERNAME_WIDTH));
+		if (name == END_MARKER)
+			break;
+
+		auto user = std::make_unique<User>();
+		user->name = name;
+		user->type = User::code_to_type(line.substr(16, 2));
+		std::string credit = line.substr(19, CREDIT_WIDTH);
+		user->wallet = is_number(credit) ? std::stod(credit) : 0.0;
+		users[name] = std::move(user);
+	}
+
+	// -- Available games: IIIIIIIIIIIIIIIIIIIIIIIIII SSSSSSSSSSSSSSS PPPPPP --
+	std::ifstream games_file(available_games_path);
+	if (!games_file)
+	{
+		std::cout << "Error: could not open available games file '" << available_games_path << "'.\n";
+		return false;
+	}
+	while (std::getline(games_file, line))
+	{
+		if (!line.empty() && line.back() == '\r')
+			line.pop_back();
+		if (line.size() != AVAILABLE_GAMES_LINE_LENGTH)
+			continue;
+
+		std::string name = trim(line.substr(0, GAME_NAME_WIDTH));
+		if (name == END_MARKER)
+			break;
+
+		auto game = std::make_unique<Game>();
+		game->name = name;
+		game->seller_username = trim(line.substr(27, USERNAME_WIDTH));
+		std::string price = line.substr(43, PRICE_WIDTH);
+		game->price = is_number(price) ? std::stod(price) : 0.0;
+		available_games.push_back(std::move(game));
+	}
+
+	// -- Games collection: IIIIIIIIIIIIIIIIIIIIIIIIII UUUUUUUUUUUUUUU --
+	std::ifstream collection_file(games_collection_path);
+	if (!collection_file)
+	{
+		std::cout << "Error: could not open games collection file '" << games_collection_path << "'.\n";
+		return false;
+	}
+	while (std::getline(collection_file, line))
+	{
+		if (!line.empty() && line.back() == '\r')
+			line.pop_back();
+		if (line.size() != COLLECTION_LINE_LENGTH)
+			continue;
+
+		std::string game_name = trim(line.substr(0, GAME_NAME_WIDTH));
+		if (game_name == END_MARKER)
+			break;
+
+		User *owner = find_user(trim(line.substr(27, USERNAME_WIDTH)));
+		if (owner)
+			owner->owned_games.push_back(game_name);
+	}
+
+	return true;
+}
+
+User *Program::find_user(const std::string &name) const
+{
+	auto it = users.find(name);
+	return it == users.end() ? nullptr : it->second.get();
+}
+
+Game *Program::find_game(const std::string &name) const
+{
+	for (const auto &game : available_games)
+	{
+		if (game->get_name() == name)
+			return game.get();
+	}
+	return nullptr;
+}
+
+bool Program::game_name_in_use(const std::string &name) const
+{
+	return find_game(name) != nullptr ||
+		   std::find(games_sold_this_session.begin(), games_sold_this_session.end(), name) != games_sold_this_session.end();
+}
+
+// ---------------------------------------------------------------------------
+// Checks done between prompts
+// ---------------------------------------------------------------------------
+
+bool Program::check_new_username(const std::string &name) const
+{
+	if (name.empty() || name.size() > USERNAME_WIDTH)
+	{
+		std::cout << "Error: username must be 1 to 15 characters.\n";
+		return false;
+	}
+	if (find_user(name))
+	{
+		std::cout << "Error: user '" << name << "' already exists.\n";
+		return false;
+	}
+	return true;
+}
+
+bool Program::check_new_game_name(const std::string &name) const
+{
+	if (name.empty() || name.size() > MAX_GAME_NAME_LENGTH)
+	{
+		std::cout << "Error: game name must be 1 to 25 characters.\n";
+		return false;
+	}
+	if (game_name_in_use(name))
+	{
+		std::cout << "Error: a game named '" << name << "' already exists.\n";
+		return false;
+	}
+	return true;
+}
+
+// ---------------------------------------------------------------------------
+// Transactions
+// ---------------------------------------------------------------------------
 
 void Program::login(const std::string &name)
 {
-	active_user = get_user(name);
-	if (!active_user)
+	// The files are read at every login so each session starts from the current data
+	if (!read_input_files())
+		return;
+
+	User *user = find_user(name);
+	if (!user)
 	{
-		std::cout << "User '" << name << "' does not exist.\n";
+		std::cout << "Error: user '" << name << "' does not exist.\n";
 		return;
 	}
 
+	active_user = user;
 	logged_in = true;
-	std::cout << "Logged in as '" << name << "'\n";
+	is_admin_session = (user->get_type() == User::Type::Admin);
+	credit_added_cents.clear();
+	games_sold_this_session.clear();
 
-	// Check if we're an admin
-	if (active_user->get_type() == User::Type::Admin)
-	{
-		std::cout << "Began Admin session. Privileged/unprivileged transactions are available.\n";
-		is_admin_session = true;
-	}
+	std::cout << "Logged in as " << name << ".\n";
 }
 
 void Program::logout()
 {
-	log_transaction_general(active_user, "00");
+	// End-of-session record, then save the daily transaction file
+	record_user_transaction("00", *active_user, active_user->get_wallet_balance());
+	write_transaction_file();
 
-	// Clear active user
 	logged_in = false;
 	is_admin_session = false;
 	active_user = nullptr;
-
-	write_transaction_log();
 }
 
 void Program::create_user(const std::string &name, User::Type type)
 {
-	// Check if user exists
-	if (user_database.count(name))
-	{
-		std::cout << "Failed to create account: user '" << name << "' already exists.\n";
-		return;
-	}
+	auto user = std::make_unique<User>();
+	user->name = name;
+	user->type = type;
+	record_user_transaction("01", *user, 0.0);
+	users[name] = std::move(user);
 
-	// Can't be over certain length (because of transaction log)
-	if (name.size() > MAX_USERNAME_LENGTH)
-	{
-		std::cout << "Failed to create account: username '" << name << "' is too long (max length:" << MAX_USERNAME_LENGTH << ")\n";
-		return;
-	}
-
-	{
-		auto new_user = std::make_unique<User>();
-		new_user->name = name;
-		new_user->type = type;
-		user_database.insert({new_user->name, std::move(new_user)});
-	}
-
-	std::cout << "Created new user '" << name << "'.\n";
-
-	// Save changes
-	write_database();
-
-	// Transaction log
-	log_transaction_general(get_user(name), "01");
+	std::cout << "User '" << name << "' created.\n";
 }
 
 void Program::delete_user(const std::string &name)
 {
-	// Check if user exists
-	if (!user_database.count(name))
+	User *user = find_user(name);
+	if (!user)
 	{
-		std::cout << "Failed to delete account: user '" << name << "' doesn't exist.\n";
+		std::cout << "Error: user '" << name << "' does not exist.\n";
+		return;
+	}
+	if (user == active_user)
+	{
+		std::cout << "Error: you cannot delete the current user.\n";
 		return;
 	}
 
-	// Transaction log
-	log_transaction_general(get_user(name), "02");
-	
-	// Delete the user from the database
-	user_database.erase(name);
+	record_user_transaction("02", *user, user->get_wallet_balance());
 
-	std::cout << "Deleted user '" << name << "'\n";
+	// Cancel the deleted user's games for sale, then remove the account
+	available_games.erase(std::remove_if(available_games.begin(), available_games.end(),
+										 [&](const std::unique_ptr<Game> &g) { return g->get_seller_username() == name; }),
+						  available_games.end());
+	users.erase(name);
 
-	// Save changes
-	write_database();
+	std::cout << "User '" << name << "' deleted.\n";
 }
 
-void Program::add_credit(const std::string &name, float amount)
+void Program::sell_game(const std::string &game_name, const std::string &price_text)
 {
-	// Check if user exists
-	if (!user_database.count(name))
+	if (!is_number(price_text))
 	{
-		std::cout << "Failed to add funds: user '" << name << "' doesn't exist.\n";
+		std::cout << "Error: price must be a number.\n";
+		return;
+	}
+	double price = std::stod(price_text);
+	if (to_cents(price) < 0 || to_cents(price) > MAX_PRICE_CENTS)
+	{
+		std::cout << "Error: price must be between 0.00 and 999.99.\n";
 		return;
 	}
 
-	// Add funds to user
-	User *user = get_user(name);
-	user->wallet += amount;
+	// Not added to available_games: it can't be bought until the next session
+	games_sold_this_session.push_back(game_name);
+	record_sell(game_name, active_user->get_name(), price);
 
-	// Save changes
-	write_database();
-
-	// Transaction log
-	log_transaction_general(user, "06");
-
-	std::cout << "Added $" << amount << " to " << name << "'s wallet (new balance: $" << user->get_wallet_balance() << ")\n";
+	std::cout << "Game '" << game_name << "' listed for sale at $" << format_money(price) << ".\n";
 }
 
-void Program::exit()
+void Program::buy_game(const std::string &game_name, const std::string &seller_name)
 {
-	exit_program = true;
-	std::cout << "Closing program...\n";
-}
-
-void Program::init_data_path()
-{
-	fs::path base_path = fs::current_path();
-	fs::path current_path;
-
-	// Start in our current path. Keep looking up until we find the data dir.
-	fs::path temp = base_path;
-	do
+	Game *game = find_game(game_name);
+	User *seller = find_user(seller_name);
+	if (!game || !seller || game->get_seller_username() != seller_name)
 	{
-		LB_ASSERT(temp.string().size() > 0, "Could not find data folder.");
-
-		current_path = temp / "data";
-		temp = temp.parent_path();
-	} while (!fs::is_directory(current_path));
-
-	// Append a slash to the end (weird syntax)
-	current_path /= "";
-
-	// We've found our data path
-	data_path = current_path;
-}
-
-void Program::read_database()
-{
-	// @TODO: remove magic numbers from reading line substrings
-
-	if (!fs::exists(data_path / ACCOUNTS_FILENAME) ||
-		!fs::exists(data_path / AVAILABLE_GAMES_FILENAME) ||
-		!fs::exists(data_path / GAMES_COLLECTION_FILENAME))
+		std::cout << "Error: game '" << game_name << "' is not available from seller '" << seller_name << "'.\n";
+		return;
+	}
+	if (active_user->owns_game(game_name))
 	{
-		// Database probably hasn't been created yet. Don't bother trying to read
+		std::cout << "Error: you already own '" << game_name << "'.\n";
+		return;
+	}
+	if (to_cents(active_user->get_wallet_balance()) < to_cents(game->get_price()))
+	{
+		std::cout << "Error: insufficient credit to buy '" << game_name << "'.\n";
 		return;
 	}
 
-	game_database.clear();
-	user_database.clear();
+	// Move the money and add the game to the buyer's collection
+	active_user->wallet -= game->get_price();
+	seller->wallet += game->get_price();
+	active_user->owned_games.push_back(game_name);
+	record_buy(game_name, seller_name, active_user->get_name(), game->get_price());
 
-	// -- Read accounts --
-	{
-		std::ifstream f(data_path / ACCOUNTS_FILENAME);
-		if (!f.is_open())
-		{
-			// Couldn't open stream for reading
-			std::string error = "Could not open '" + data_path.string() + ACCOUNTS_FILENAME + "' for reading.";
-			LB_ASSERT(false, error.c_str());
-		}
-
-		std::string line = "";
-		while (std::getline(f, line))
-		{
-			LB_ASSERT(line.size() == LINE_LENGTH_ACCOUNTS, "Accounts line is not correct size.");
-			
-			std::string name = line.substr(0, MAX_USERNAME_LENGTH);
-			std::string type = line.substr(16, 2);
-			std::string balance = line.substr(19, 9);
-
-			// Skip "end" entry
-			if (name.substr(0, 4) == "END ")
-			{
-				continue;
-			}
-
-			LB_ASSERT(is_float(balance), "User's balance is not a valid float.");
-
-			// Create a new user
-			std::unique_ptr<User> u = std::make_unique<User>();
-			u->name = name;
-			u->wallet = std::stof(balance);
-			u->type = deserialize_user_type(type);
-
-			user_database.insert({u->name, std::move(u)});
-		}
-		
-		f.close();
-	}
-
-	// -- Read available games --
-	{
-		std::ifstream f(data_path / AVAILABLE_GAMES_FILENAME);
-		if (!f.is_open())
-		{
-			// Couldn't open stream for reading
-			std::string error = "Could not open '" + data_path.string() + AVAILABLE_GAMES_FILENAME + "' for reading.";
-			LB_ASSERT(false, error.c_str());
-		}
-
-		std::string line = "";
-		while (std::getline(f, line))
-		{
-			LB_ASSERT(line.size() == LINE_LENGTH_AVAILABLE_GAMES, "Available games line is not correct size.");
-
-			std::string name = line.substr(0, MAX_GAME_NAME_LENGTH);
-			std::string seller_name = line.substr(27, 15);
-			std::string price = line.substr(44, 6);
-
-			// Skip "end" entry
-			if (name.substr(0, 4) == "END ")
-			{
-				continue;
-			}
-
-			LB_ASSERT(is_float(price), "Game price is not a valid float.");
-
-			auto g = std::make_unique<Game>();
-			g->name = name;
-			g->seller_username = seller_name;
-			g->price = std::stof(price);
-
-			game_database.insert({g->name, std::move(g)});
-		}
-
-		f.close();
-	}
-
-	// -- Read games collection --
-	{
-		std::ifstream f(data_path / GAMES_COLLECTION_FILENAME);
-		if (!f.is_open())
-		{
-			// Couldn't open stream for reading
-			std::string error = "Could not open '" + data_path.string() + GAMES_COLLECTION_FILENAME + "' for reading.";
-			LB_ASSERT(false, error.c_str());
-		}
-
-		std::string line = "";
-		while (std::getline(f, line))
-		{
-			LB_ASSERT(line.size() == LINE_LENGTH_GAME_COLLECTION, "Game collection line is not correct size.");
-
-			std::string game_name = line.substr(0, MAX_GAME_NAME_LENGTH);
-			std::string owner_name = line.substr(27, MAX_USERNAME_LENGTH);
-
-			// Skip "end" entry
-			if (game_name.substr(0, 4) == "END ")
-			{
-				continue;
-			}
-
-			User *user = get_user(owner_name);
-			LB_ASSERT(user, "Owner of game doesn't exist.");
-			user->owned_games.push_back(game_name);
-		}
-
-		f.close();
-	}
+	std::cout << "Purchased '" << game_name << "' from " << seller_name << " for $" << format_money(game->get_price()) << ".\n";
 }
 
-void Program::write_database()
+void Program::refund(const std::string &buyer_name, const std::string &seller_name, const std::string &amount_text)
 {
-	// @TODO: put some of the repeated code inside function that takes in params for line
-	
-	// -- Write accounts --
+	User *buyer = find_user(buyer_name);
+	User *seller = find_user(seller_name);
+	if (!buyer)
 	{
-		std::ofstream f(data_path / ACCOUNTS_FILENAME);
-		if (!f.is_open())
-		{
-			// Couldn't open stream for writing
-			std::string error = "Could not open '" + data_path.string() + ACCOUNTS_FILENAME + "' for writing.";
-			LB_ASSERT(false, error.c_str());
-		}
-
-		for (auto &pair : user_database)
-		{
-			User *user = pair.second.get();
-			std::string line = "";
-
-			line += space_padded_username(user->get_name());
-			line += " ";
-			
-			line += serialize_user_type(user->get_type());
-			line += " ";
-
-			line += zero_padded_credit(user->get_wallet_balance());
-
-			LB_ASSERT(line.size() == LINE_LENGTH_ACCOUNTS, "Accounts line is not correct length.");
-			
-			f << line << "\n";
-		}
-
-		// File ends with special user named "END" with an empty user type and the credit field empty
-		{
-			std::string line = "";
-
-			line += space_padded_username("END");
-			line += " ";
-
-			line += "  "; // Type (blank)
-			line += " ";
-
-			line += zero_padded_credit(0);
-
-			LB_ASSERT(line.size() == LINE_LENGTH_ACCOUNTS, "Accounts line is not correct length.");
-			
-			f << line << "\n";
-		}
-		
-		f.close();
+		std::cout << "Error: buyer '" << buyer_name << "' does not exist.\n";
+		return;
 	}
-
-	// -- Write available games --
+	if (!seller)
 	{
-		std::ofstream f(data_path / AVAILABLE_GAMES_FILENAME);
-		if (!f.is_open())
-		{
-			// Couldn't open stream for writing
-			std::string error = "Could not open '" + data_path.string() + AVAILABLE_GAMES_FILENAME + "' for writing.";
-			LB_ASSERT(false, error.c_str());
-		}
-
-		for (auto &pair : game_database)
-		{
-			Game *game = pair.second.get();
-			std::string line = "";
-
-			line += space_padded_string(game->get_name(), MAX_GAME_NAME_LENGTH);
-			line += " ";
-
-			line += space_padded_username(game->get_seller_username());
-			line += " ";
-
-			line += zero_padded_price(game->get_price(), MAX_PRICE_DIGITS);
-
-			LB_ASSERT(line.size() == LINE_LENGTH_AVAILABLE_GAMES, "Available games line is not correct length.");
-			f << line << "\n";
-		}
-
-		// File ends with special game for sale named END with all other fields empty
-		{
-			std::string line = "";
-
-			line += space_padded_string("END", MAX_GAME_NAME_LENGTH);
-			line += " ";
-
-			line += space_padded_username("");
-			line += " ";
-
-			line += zero_padded_price(0, MAX_PRICE_DIGITS);
-
-			LB_ASSERT(line.size() == LINE_LENGTH_AVAILABLE_GAMES, "Available games line is not correct length.");
-			f << line << "\n";
-		}
-
-		f.close();
+		std::cout << "Error: seller '" << seller_name << "' does not exist.\n";
+		return;
 	}
-
-	// -- Write games collection --
+	if (!is_number(amount_text))
 	{
-		std::ofstream f(data_path / GAMES_COLLECTION_FILENAME);
-		if (!f.is_open())
-		{
-			// Couldn't open stream for writing
-			std::string error = "Could not open '" + data_path.string() + GAMES_COLLECTION_FILENAME + "' for writing.";
-			LB_ASSERT(false, error.c_str());
-		}
-
-		for (auto &pair : user_database)
-		{
-			User *user = pair.second.get();
-			for (const std::string &game_name : user->get_owned_games())
-			{
-				Game *game = get_game(game_name);
-				if (!game)
-				{
-					continue;
-				}
-
-				std::string line = "";
-
-				line += space_padded_string(game->get_name(), MAX_GAME_NAME_LENGTH);
-				line += " ";
-
-				line += space_padded_username(user->get_name());
-
-				LB_ASSERT(line.size() == LINE_LENGTH_GAME_COLLECTION, "Games collection line is not correct length.");
-				f << line << "\n";
-			}
-		}
-
-		// File ends with a special game named END with all other fields empty
-		{
-			std::string line = "";
-
-			line += space_padded_string("END", MAX_GAME_NAME_LENGTH);
-			line += " ";
-
-			line += space_padded_username("");
-
-			LB_ASSERT(line.size() == LINE_LENGTH_GAME_COLLECTION, "Games collection line is not correct length.");
-			f << line << "\n";
-		}
-		
-		f.close();
+		std::cout << "Error: amount must be a number.\n";
+		return;
 	}
-}
-
-void Program::clear_commands()
-{
-	// Commands are heap allocated, so we need to free them here...
-	for (Command *c : commands)
+	double amount = std::stod(amount_text);
+	if (to_cents(amount) <= 0)
 	{
-		delete c;
+		std::cout << "Error: amount must be greater than 0.\n";
+		return;
 	}
-	commands.clear();
-}
-
-void Program::build_command_list()
-{
-	clear_commands();
-
-	if (!logged_in)
+	// Requirements gap (test 36): a seller's credit can never go below zero
+	if (to_cents(seller->get_wallet_balance()) < to_cents(amount))
 	{
-		push_command<LoginCommand>();
-		push_command<ExitCommand>();
-	}
-	else
-	{
-		push_command<ListGamesCommand>();
-
-		// Add admin commands to the list
-		if (is_admin_session)
-		{
-			push_command<CreateCommand>();
-			push_command<DeleteCommand>();
-			push_command<AddCreditCommand>();
-		}
-		
-		push_command<LogoutCommand>();
-	}
-}
-
-void Program::log_transaction_general(const User *user, const std::string &transaction_code)
-{
-	std::string str = "";
-
-	// Write transaction code
-	str += transaction_code;
-	str += " ";
-
-	// Write username
-	str += space_padded_username(user->get_name());
-	str += " ";
-
-	// Write user type
-	str += serialize_user_type(user->get_type());
-	str += " ";
-
-	// Write available credit
-	str += float_to_fmtstring(user->get_wallet_balance());
-	str += "\n";
-
-	transaction_log.push_back(str);
-}
-
-void Program::log_transaction_refund(const User *user, const Game *game)
-{
-	std::string str = "";
-
-	// Write transaction code (refund)
-	str += "05";
-	str += " ";
-
-	// Write buyer's username
-	str += space_padded_username(user->get_name());
-	str += " ";
-	
-	// Write seller's username
-	str += space_padded_username(game->get_seller_username());
-	str += " ";
-
-	// Write refund credit
-	str += float_to_fmtstring(game->get_price());
-
-	transaction_log.push_back(str);
-}
-
-void Program::log_transaction_sell(const Game *game)
-{
-	std::string str = "";
-
-	// Write transaction code (sell)
-	str += "03";
-	str += " ";
-
-	// Write game's name
-	str += game->get_name();
-	str += " ";
-	
-	// Write seller's username
-	str += space_padded_username(game->get_seller_username());
-	str += " ";
-
-	// Write game's price
-	str += float_to_fmtstring(game->get_price());
-
-	transaction_log.push_back(str);
-}
-
-void Program::log_transaction_buy(const User *user, const Game *game)
-{
-	std::string str = "";
-
-	// Write transaction code (buy)
-	str += "04";
-	str += " ";
-
-	// Write game's name
-	str += game->get_name();
-	str += " ";
-	
-	// Write seller's username
-	str += space_padded_username(game->get_seller_username());
-	str += " ";
-
-	// Write buyer's username
-	str += space_padded_username(user->get_name());
-	str += " ";
-
-	// Write game's price
-	str += float_to_fmtstring(game->get_price());
-
-	transaction_log.push_back(str);
-}
-
-void Program::write_transaction_log()
-{
-	fs::path path = data_path / TRANSACTION_LOG_FILENAME;
-	std::ofstream f(path);
-
-	if (!f.is_open())
-	{
-		// Failed to open the file stream
-		std::cout << "Error: Could not write to transaction log ('" << path.string() << "')\n";
+		std::cout << "Error: seller '" << seller_name << "' does not have enough credit for this refund.\n";
 		return;
 	}
 
-	// Write file contents
-	f << "--- Transaction log ---\n";
-	for (auto &line : transaction_log)
+	seller->wallet -= amount;
+	buyer->wallet += amount;
+	record_refund(buyer_name, seller_name, amount);
+
+	std::cout << "Refunded $" << format_money(amount) << " from " << seller_name << " to " << buyer_name << ".\n";
+}
+
+void Program::add_credit(const std::string &target_name, const std::string &amount_text)
+{
+	if (!is_number(amount_text))
 	{
-		f << line;
+		std::cout << "Error: amount must be a number.\n";
+		return;
+	}
+	double amount = std::stod(amount_text);
+	if (to_cents(amount) <= 0)
+	{
+		std::cout << "Error: amount must be greater than 0.\n";
+		return;
 	}
 
-	transaction_log.clear();
-	transaction_log.shrink_to_fit();
+	User *target = find_user(target_name);
+	if (!target)
+	{
+		std::cout << "Error: user '" << target_name << "' does not exist.\n";
+		return;
+	}
 
-	f.close();
+	// At most $1000.00 per account per session
+	long long already_added = credit_added_cents[target_name];
+	if (already_added + to_cents(amount) > MAX_CREDIT_PER_SESSION_CENTS)
+	{
+		std::cout << "Error: a maximum of $1000.00 can be added to an account per session.\n";
+		return;
+	}
+	if (to_cents(target->get_wallet_balance()) + to_cents(amount) > MAX_BALANCE_CENTS)
+	{
+		std::cout << "Error: balance cannot be more than $999999.99.\n";
+		return;
+	}
+
+	target->wallet += amount;
+	credit_added_cents[target_name] = already_added + to_cents(amount);
+	record_user_transaction("06", *target, amount);
+
+	std::cout << "Added $" << format_money(amount) << " to " << target_name
+			  << ". New balance: $" << format_money(target->get_wallet_balance()) << ".\n";
+}
+
+void Program::list_available_games() const
+{
+	std::cout << "Games available for sale:\n";
+	if (available_games.empty())
+		std::cout << "(none)\n";
+
+	for (const auto &game : available_games)
+	{
+		std::cout << game->get_name() << " | " << game->get_seller_username()
+				  << " | $" << format_money(game->get_price()) << "\n";
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Daily transaction file
+// ---------------------------------------------------------------------------
+
+void Program::record_user_transaction(const std::string &code, const User &user, double credit)
+{
+	transaction_lines.push_back(code + " " + pad_right(user.get_name(), USERNAME_WIDTH) + " " +
+								User::type_to_code(user.get_type()) + " " + format_money_padded(credit, CREDIT_WIDTH));
+}
+
+void Program::record_refund(const std::string &buyer, const std::string &seller, double amount)
+{
+	transaction_lines.push_back("05 " + pad_right(buyer, USERNAME_WIDTH) + " " + pad_right(seller, USERNAME_WIDTH) +
+								" " + format_money_padded(amount, CREDIT_WIDTH));
+}
+
+void Program::record_sell(const std::string &game, const std::string &seller, double price)
+{
+	transaction_lines.push_back("03 " + pad_right(game, GAME_NAME_WIDTH) + " " + pad_right(seller, USERNAME_WIDTH) +
+								" " + format_money_padded(price, PRICE_WIDTH));
+}
+
+void Program::record_buy(const std::string &game, const std::string &seller, const std::string &buyer, double price)
+{
+	transaction_lines.push_back("04 " + pad_right(game, GAME_NAME_WIDTH) + " " + pad_right(seller, USERNAME_WIDTH) +
+								" " + pad_right(buyer, USERNAME_WIDTH) + " " + format_money_padded(price, PRICE_WIDTH));
+}
+
+void Program::write_transaction_file()
+{
+	// The file holds every session of the day, so it is rewritten in full at each logout
+	std::ofstream file(transaction_path);
+	if (!file)
+	{
+		std::cout << "Error: could not write daily transaction file '" << transaction_path << "'.\n";
+		return;
+	}
+	for (const std::string &line : transaction_lines)
+		file << line << "\n";
 }

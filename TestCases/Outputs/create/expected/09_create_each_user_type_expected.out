@@ -1,0 +1,16 @@
+Welcome to the Game Distribution System.
+Enter username:
+Logged in as admin.
+Enter new username:
+Enter user type (AA, FS, BS, SS):
+User 'newadmin' created.
+Enter new username:
+Enter user type (AA, FS, BS, SS):
+User 'newfull' created.
+Enter new username:
+Enter user type (AA, FS, BS, SS):
+User 'newbuyer' created.
+Enter new username:
+Enter user type (AA, FS, BS, SS):
+User 'newseller' created.
+Logged out.

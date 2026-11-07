@@ -1,64 +1,31 @@
 #pragma once
-#include <string> 
-#include <vector>
+#include <string>
 
-// -- Debug assert --
-#ifdef _DEBUG
+// Small helper functions used throughout the Front End.
 
-#ifdef BUILD_PLATFORM_WINDOWS
-#include <windows.h>
-
-#define LB_ASSERT(condition, msg)                                               \
-    do                                                                          \
-    {                                                                           \
-        if (!(condition))                                                       \
-        {                                                                       \
-            std::cout << "Error in '" << __FILE__ << "' at line #" << __LINE__; \
-            std::cout << "\n  --> " << msg << "\n";                             \
-            MessageBox(                                                         \
-                NULL,                                                           \
-                msg,                                                            \
-                "Error",                                                        \
-                MB_OK | MB_ICONERROR);                                          \
-            __debugbreak();                                                     \
-        }                                                                       \
-    } while (0)
-#else
-#define LB_ASSERT(condition, msg)                                               \
-    do                                                                          \
-    {                                                                           \
-        if (!(condition))                                                       \
-        {                                                                       \
-            std::cout << "Error in '" << __FILE__ << "' at line #" << __LINE__; \
-            std::cout << "\n  --> " << msg << "\n";                             \
-            __debugbreak();                                                     \
-        }                                                                       \
-    } while (0)
-#endif
-
-#else
-#define LB_ASSERT(condition, msg)                   \
-    do                                              \
-    {                                               \
-        if (!(condition))                           \
-        {                                           \
-            std::cout << "\n  --> " << msg << "\n"; \
-        }                                           \
-    } while (0)
-
-#endif // _DEBUG
-
-// Return a lowercase version of the string
+// Return a lowercase copy of the string
 std::string to_lower_case(const std::string &str);
 
-// Split a string along a delimiter char
-std::vector<std::string> split(const std::string &str, char delim);
+// Return an uppercase copy of the string
+std::string to_upper_case(const std::string &str);
 
-// Can this string be converted into a float?
-bool is_float(const std::string &str);
+// Return the string without leading/trailing whitespace (spaces, tabs, \r, \n)
+std::string trim(const std::string &str);
 
-// Count how many digits are in a number
-int count_digits(float number);
+// Return 'str' padded on the right with spaces up to 'length' characters
+// (used for the left-justified text fields in the data files)
+std::string pad_right(const std::string &str, int length);
 
-// Convert float to string with 2 decimal point formatting
-std::string float_to_fmtstring(float f);
+// Can the whole string be read as a number (e.g. "15", "15.00")?
+bool is_number(const std::string &str);
+
+// Convert a dollar amount to whole cents, rounding to the nearest cent.
+// All money comparisons use cents so that e.g. 600.00 + 400.00 is exactly 1000.00.
+long long to_cents(double dollars);
+
+// Format a dollar amount with 2 decimals, e.g. 5 -> "5.00"
+std::string format_money(double dollars);
+
+// Format a dollar amount with 2 decimals, zero-padded to 'width' characters,
+// e.g. format_money_padded(5, 9) -> "000005.00"
+std::string format_money_padded(double dollars, int width);

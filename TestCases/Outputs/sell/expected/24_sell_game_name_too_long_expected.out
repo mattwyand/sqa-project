@@ -1,0 +1,7 @@
+Welcome to the Game Distribution System.
+Enter username:
+Logged in as seller.
+Enter game name:
+Error: game name must be 1 to 25 characters.
+Error: unknown transaction '25.00'.
+Logged out.
