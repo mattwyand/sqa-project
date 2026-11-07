@@ -60,3 +60,24 @@ std::string float_to_fmtstring(float f)
 	ss << std::fixed << std::setprecision(2) << f;
 	return ss.str();
 }
+
+
+std::string trim_whitespace(const std::string &s)
+{
+	std::string result = s;
+
+	// Find the last character that is NOT a whitespace character
+	size_t end = s.find_last_not_of(" \t\n\r\f\v");
+
+	// If the string is all whitespace, erase everything. Otherwise, erase after the last character.
+	if (end == std::string::npos) 
+	{
+		result.clear();
+	}
+	else 
+	{
+		result.erase(end + 1);
+	}
+
+	return result;
+}

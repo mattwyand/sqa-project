@@ -62,3 +62,6 @@ int count_digits(float number);
 
 // Convert float to string with 2 decimal point formatting
 std::string float_to_fmtstring(float f);
+
+// Trim a string's whitespace
+std::string trim_whitespace(const std::string &s);
