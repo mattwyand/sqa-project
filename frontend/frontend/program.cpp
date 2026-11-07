@@ -465,7 +465,7 @@ void Program::read_database()
 
 			// Create a new user
 			std::unique_ptr<User> u = std::make_unique<User>();
-			u->name = name;
+			u->name = trim_whitespace(name);
 			u->wallet = std::stof(balance);
 			u->type = deserialize_user_type(type);
 
@@ -503,7 +503,7 @@ void Program::read_database()
 			LB_ASSERT(is_float(price), "Game price is not a valid float.");
 
 			auto g = std::make_unique<Game>();
-			g->name = name;
+			g->name = trim_whitespace(name);
 			g->seller_username = seller_name;
 			g->price = std::stof(price);
 
@@ -537,9 +537,9 @@ void Program::read_database()
 				continue;
 			}
 
-			User *user = get_user(owner_name);
+			User *user = get_user(trim_whitespace(owner_name));
 			LB_ASSERT(user, "Owner of game doesn't exist.");
-			user->owned_games.push_back(game_name);
+			user->owned_games.push_back(trim_whitespace(game_name));
 		}
 
 		f.close();
