@@ -12,6 +12,8 @@ void Command::print_description()
 
 void LoginCommand::run(const std::vector<std::string> &args)
 {
+	// @TODO: Allow for usernames with spaces
+
 	if (args.size() < 2)
 	{
 		std::cout << "usage: login [name]\n";
