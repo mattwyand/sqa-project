@@ -1,0 +1,8 @@
+Welcome to the Game Distribution System.
+Enter username:
+Logged in as fulluser.
+Error: refund is a privileged transaction.
+Error: unknown transaction 'buyer'.
+Error: unknown transaction 'seller'.
+Error: unknown transaction '5.00'.
+Logged out.

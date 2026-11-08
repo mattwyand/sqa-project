@@ -1,116 +1,120 @@
 #include "commands.h"
 
 #include "program.h"
-#include "util.h"
+#include "user.h"
 
 #include <iostream>
 
-void Command::print_description()
+void LoginCommand::run()
 {
-	std::cout << name << "\t- " << description << "\n";
-}
-
-void LoginCommand::run(const std::vector<std::string> &args)
-{
-	// @TODO: Allow for usernames with spaces
-
-	if (args.size() < 2)
+	// No second login until the current session has logged out
+	if (program->is_logged_in())
 	{
-		std::cout << "usage: login [name]\n";
+		std::cout << "Error: already logged in.\n";
 		return;
 	}
-	program->login(args[1]);
+
+	program->login(program->prompt("Enter username:"));
 }
 
-void LogoutCommand::run(const std::vector<std::string> &args)
+void LogoutCommand::run()
 {
-	std::cout << "Logged out\n";
 	program->logout();
+	std::cout << "Logged out.\n";
 }
 
-void ListGamesCommand::run(const std::vector<std::string>& args)
+void CreateCommand::run()
 {
-	program->list_owned_games();
-}
-
-void ExitCommand::run(const std::vector<std::string> &args)
-{
-	program->exit();
-}
-
-void CreateCommand::run(const std::vector<std::string> &args)
-{
-	// @TODO: Turn this into more than one step
-	if (args.size() < 3)
+	if (!program->is_admin())
 	{
-		std::cout << "usage: create [name] [type]\n";
+		std::cout << "Error: create is a privileged transaction.\n";
 		return;
 	}
 
-	// Type string constants
-	const std::string admin_code 			= "aa";
-	const std::string full_standard_code 	= "fs";
-	const std::string buy_standard_code 	= "bs";
-	const std::string sell_standard_code 	= "ss";
+	// Check the name before asking for the type, so the user hears about a bad name at once
+	std::string new_name = program->prompt("Enter new username:");
+	if (!program->check_new_username(new_name))
+		return;
 
-	// Figure out which type of user to create 
-	const std::string &type_str = args[2];
-	User::Type type = User::Type::None;
-
-	if (type_str == admin_code)
+	std::string type_code = program->prompt("Enter user type (AA, FS, BS, SS):");
+	User::Type type = User::code_to_type(type_code);
+	if (type == User::Type::None)
 	{
-		type = User::Type::Admin;
-	}
-	else if (type_str == full_standard_code)
-	{
-		type = User::Type::FullStandard;
-	}
-	else if (type_str == buy_standard_code)
-	{
-		type = User::Type::BuyStandard;
-	}
-	else if (type_str == sell_standard_code)
-	{
-		type = User::Type::SellStandard;
-	}
-	else
-	{
-		// User entered invalid type...
-		std::cout << "User type must be one of the following \n"
-		<< admin_code << " - Admin\n"
-		<< full_standard_code << " - Full Standard\n"
-		<< buy_standard_code << " - Buy Standard\n"
-		<< sell_standard_code << " - Sell Standard\n";
+		std::cout << "Error: user type must be AA, FS, BS or SS.\n";
 		return;
 	}
-	
-	program->create_user(args[1], type);
+
+	program->create_user(new_name, type);
 }
 
-void DeleteCommand::run(const std::vector<std::string> &args)
+void DeleteCommand::run()
 {
-	if (args.size() < 2)
+	if (!program->is_admin())
 	{
-		std::cout << "usage: delete [name]\n";
+		std::cout << "Error: delete is a privileged transaction.\n";
 		return;
 	}
 
-	program->delete_user(args[1]);
+	program->delete_user(program->prompt("Enter username to delete:"));
 }
 
-void AddCreditCommand::run(const std::vector<std::string> &args)
+void SellCommand::run()
 {
-	if (args.size() < 3)
+	if (program->active_user_type() == User::Type::BuyStandard)
 	{
-		std::cout << "usage: addcredit [name] [amount]\n";
+		std::cout << "Error: buy-standard accounts cannot sell games.\n";
 		return;
 	}
 
-	if (!is_float(args[2]))
+	// Check the name before asking for the price
+	std::string game_name = program->prompt("Enter game name:");
+	if (!program->check_new_game_name(game_name))
+		return;
+
+	std::string price_text = program->prompt("Enter price:");
+	program->sell_game(game_name, price_text);
+}
+
+void BuyCommand::run()
+{
+	if (program->active_user_type() == User::Type::SellStandard)
 	{
-		std::cout << "[amount] must be a number\n";
+		std::cout << "Error: sell-standard accounts cannot buy games.\n";
 		return;
 	}
-	
-	program->add_credit(args[1], std::stof(args[2]));
+
+	std::string game_name = program->prompt("Enter game name:");
+	std::string seller_name = program->prompt("Enter seller username:");
+	program->buy_game(game_name, seller_name);
+}
+
+void RefundCommand::run()
+{
+	if (!program->is_admin())
+	{
+		std::cout << "Error: refund is a privileged transaction.\n";
+		return;
+	}
+
+	std::string buyer_name = program->prompt("Enter buyer username:");
+	std::string seller_name = program->prompt("Enter seller username:");
+	std::string amount_text = program->prompt("Enter refund amount:");
+	program->refund(buyer_name, seller_name, amount_text);
+}
+
+void AddCreditCommand::run()
+{
+	std::string amount_text = program->prompt("Enter amount:");
+
+	// Admins choose the account; standard users always credit their own account
+	std::string target_name = program->active_user_name();
+	if (program->is_admin())
+		target_name = program->prompt("Enter username:");
+
+	program->add_credit(target_name, amount_text);
+}
+
+void ListCommand::run()
+{
+	program->list_available_games();
 }

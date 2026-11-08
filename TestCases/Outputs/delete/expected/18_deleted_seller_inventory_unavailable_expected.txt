@@ -1,3 +1,0 @@
-The delete of 'seller' succeeds.
-The later buy involving seller's previously available game is rejected.
-No buy transaction is written for that game.

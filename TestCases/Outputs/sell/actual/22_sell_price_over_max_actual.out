@@ -1,0 +1,7 @@
+Welcome to the Game Distribution System.
+Enter username:
+Logged in as seller.
+Enter game name:
+Enter price:
+Error: price must be between 0.00 and 999.99.
+Logged out.

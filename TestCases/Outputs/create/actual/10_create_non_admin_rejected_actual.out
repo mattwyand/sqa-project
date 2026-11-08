@@ -1,0 +1,7 @@
+Welcome to the Game Distribution System.
+Enter username:
+Logged in as fulluser.
+Error: create is a privileged transaction.
+Error: unknown transaction 'newuser'.
+Error: unknown transaction 'FS'.
+Logged out.

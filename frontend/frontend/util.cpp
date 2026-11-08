@@ -1,64 +1,73 @@
 #include "util.h"
 
-#include <sstream>
-#include <iomanip> // for std::fixed and std::setprecision
-#include <charconv> // For converteding std::string to float
+#include <cctype>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 std::string to_lower_case(const std::string &str)
 {
-	std::string result = "";
-	for (const char &c : str)
-	{
-		result += std::tolower(static_cast<unsigned char>(c));
-	}
+	std::string result = str;
+	for (char &c : result)
+		c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
 	return result;
 }
 
-std::vector<std::string> split(const std::string &str, char delim)
+std::string to_upper_case(const std::string &str)
 {
-	// We read the string through a stringstream so we can use std::getline
-	std::vector<std::string> result;
-	std::stringstream ss(str);
-	std::string token;
-
-	while (std::getline(ss, token, delim))
-	{
-		result.push_back(token);
-	}
+	std::string result = str;
+	for (char &c : result)
+		c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
 	return result;
 }
 
-bool is_float(const std::string &str)
+std::string trim(const std::string &str)
 {
-	// An empty string can't be converted to a float
+	const char *whitespace = " \t\r\n";
+	size_t first = str.find_first_not_of(whitespace);
+	if (first == std::string::npos)
+		return "";
+	size_t last = str.find_last_not_of(whitespace);
+	return str.substr(first, last - first + 1);
+}
+
+std::string pad_right(const std::string &str, int length)
+{
+	std::string result = str;
+	while (static_cast<int>(result.size()) < length)
+		result += ' ';
+	return result;
+}
+
+bool is_number(const std::string &str)
+{
+	// An empty string can't be a number
 	if (str.empty())
 		return false;
-	
-	// Try to convert string to a float.
-	// If successful, return true. If not successful, return false.
-	float value;
-	auto [ptr, ec] = std::from_chars(str.data(), str.data() + str.size(), value);
-	return ec == std::errc() && ptr == str.data() + str.size();
+
+	// strtod must consume the whole string, otherwise text like "12abc" would be accepted
+	char *end = nullptr;
+	double value = std::strtod(str.c_str(), &end);
+	return end == str.c_str() + str.size() && std::isfinite(value);
 }
 
-int count_digits(float number)
+long long to_cents(double dollars)
 {
-	int count = 0;
-	while (number >= 1)
-	{
-		number /= 10;
-		count++;
-	}
-	
-	return count;
+	return std::llround(dollars * 100.0);
 }
 
-std::string float_to_fmtstring(float f)
+std::string format_money(double dollars)
 {
-	// Use an ostringstream to truncate the precision of the float to 2 decimal points
-	std::ostringstream ss;
-	ss << std::fixed << std::setprecision(2) << f;
-	return ss.str();
+	char buffer[32];
+	std::snprintf(buffer, sizeof(buffer), "%.2f", to_cents(dollars) / 100.0);
+	return buffer;
+}
+
+std::string format_money_padded(double dollars, int width)
+{
+	char buffer[32];
+	std::snprintf(buffer, sizeof(buffer), "%0*.2f", width, to_cents(dollars) / 100.0);
+	return buffer;
 }
 
 

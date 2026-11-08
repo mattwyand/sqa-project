@@ -1,0 +1,9 @@
+Welcome to the Game Distribution System.
+Enter username:
+Logged in as admin.
+Enter username to delete:
+User 'seller' deleted.
+Enter game name:
+Enter seller username:
+Error: game 'Portal 2' is not available from seller 'seller'.
+Logged out.

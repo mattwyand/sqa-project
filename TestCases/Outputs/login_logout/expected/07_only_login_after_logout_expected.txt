@@ -1,4 +1,0 @@
-The first session logs in and out successfully.
-The buy after logout is rejected because no session is active.
-A new login is then accepted.
-No rejected buy transaction is recorded.

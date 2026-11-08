@@ -1,30 +1,29 @@
 #pragma once
 #include <string>
 
-// Represents a game in the store/user's library
+// Represents one game that is available for sale, as read from the available games file.
 class Game
 {
 	// 'Program' class should be able to edit private members
 	friend class Program;
 
 private:
+	// The game's name (unique, at most 25 characters)
 	std::string name = "";
-	std::string description = "";
+	// Username of the account selling the game
 	std::string seller_username = "";
-	float price = 0.0f;
+	// Price in dollars (0.00 to 999.99)
+	double price = 0.0;
 
 public:
 	Game() = default;
 
 	// Returns the game's name
-	inline const std::string get_name() const { return name; }
-
-	// Returns the game's description
-	inline const std::string get_description() const { return description; }
+	inline const std::string &get_name() const { return name; }
 
 	// Return the seller's username
-	inline const std::string get_seller_username() const { return seller_username; }
+	inline const std::string &get_seller_username() const { return seller_username; }
 
 	// Return the game's price
-	inline const float get_price() const { return price; }
+	inline double get_price() const { return price; }
 };

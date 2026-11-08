@@ -1,49 +1,35 @@
 #include "user.h"
-#include "game.h"
+#include "util.h"
 
-namespace
+#include <algorithm>
+
+bool User::owns_game(const std::string &game_name) const
 {
-	const std::string STR_ADMIN = "admin";
-	const std::string STR_FULL_STANDARD = "full-standard";
-	const std::string STR_BUY_STANDARD = "buy-standard";
-	const std::string STR_SELL_STANDARD = "sell-standard";
+	return std::find(owned_games.begin(), owned_games.end(), game_name) != owned_games.end();
 }
 
-std::string User::type_to_string(Type user_type)
+User::Type User::code_to_type(const std::string &code)
 {
-	switch (user_type)
-	{
-	case Type::Admin: 			return STR_ADMIN;
-	case Type::FullStandard: 	return STR_FULL_STANDARD; 
-	case Type::BuyStandard: 	return STR_BUY_STANDARD; 
-	case Type::SellStandard: 	return STR_SELL_STANDARD; 
-	
-	default:
-		// Invalid type
-		return "";
-	}
+	// Accept the code in any letter case, e.g. "fs" or "FS"
+	const std::string upper = to_upper_case(code);
+
+	if (upper == "AA") return Type::Admin;
+	if (upper == "FS") return Type::FullStandard;
+	if (upper == "BS") return Type::BuyStandard;
+	if (upper == "SS") return Type::SellStandard;
+
+	// Not a valid type code
+	return Type::None;
 }
 
-User::Type User::string_to_type(const std::string &str)
+std::string User::type_to_code(Type type)
 {
-	// NOTE: We can't use a switch statement here because string comparison
-	// overrides the '==' operator.
-	if (str == STR_ADMIN)
+	switch (type)
 	{
-		return Type::Admin;
+	case Type::Admin:        return "AA";
+	case Type::FullStandard: return "FS";
+	case Type::BuyStandard:  return "BS";
+	case Type::SellStandard: return "SS";
+	default:                 return "  "; // unknown type -> blank field
 	}
-	else if (str == STR_FULL_STANDARD)
-	{
-		return Type::FullStandard;
-	}
-	else if (str == STR_BUY_STANDARD)
-	{
-		return Type::BuyStandard;
-	}
-	else if (str == STR_SELL_STANDARD)
-	{
-		return Type::SellStandard;
-	}
-
-    return Type::None;
 }

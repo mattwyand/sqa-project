@@ -1,0 +1,7 @@
+Welcome to the Game Distribution System.
+Enter username:
+Logged in as admin.
+Enter new username:
+Error: username must be 1 to 15 characters.
+Error: unknown transaction 'FS'.
+Logged out.

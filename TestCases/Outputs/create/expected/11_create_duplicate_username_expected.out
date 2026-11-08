@@ -1,0 +1,7 @@
+Welcome to the Game Distribution System.
+Enter username:
+Logged in as admin.
+Enter new username:
+Error: user 'buyer' already exists.
+Error: unknown transaction 'FS'.
+Logged out.

@@ -1,2 +1,0 @@
-Delete is rejected because the current user cannot delete themself.
-The admin session remains active.

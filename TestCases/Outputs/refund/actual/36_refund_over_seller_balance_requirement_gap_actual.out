@@ -1,0 +1,8 @@
+Welcome to the Game Distribution System.
+Enter username:
+Logged in as admin.
+Enter buyer username:
+Enter seller username:
+Enter refund amount:
+Error: seller 'seller' does not have enough credit for this refund.
+Logged out.

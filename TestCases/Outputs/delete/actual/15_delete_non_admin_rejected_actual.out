@@ -1,0 +1,6 @@
+Welcome to the Game Distribution System.
+Enter username:
+Logged in as fulluser.
+Error: delete is a privileged transaction.
+Error: unknown transaction 'buyer'.
+Logged out.

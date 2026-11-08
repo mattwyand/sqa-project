@@ -1,0 +1,2114 @@
+checking outputs of test 37_addcredit_standard_valid
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1455c1,6
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'addcredit' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < '100.00' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 38_addcredit_admin_valid_target
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1453c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'addcredit' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < '100.00' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 39_addcredit_admin_invalid_target
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1453c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'addcredit' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < '100.00' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 40_addcredit_1000_boundary
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1455c1,6
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'addcredit' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < '1000.00' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 41_addcredit_over_1000_single
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1455c1,6
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'addcredit' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < '1000.01' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 42_addcredit_over_1000_cumulative
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1452c1,10
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'addcredit' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < '600.00' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 45_unknown_transaction
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1457c1,5
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'dance' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'logout' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 46_sell_non_numeric_price
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1456c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'seller' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'sell' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'bad' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 47_refund_non_numeric_amount
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1454c1,8
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'refund' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 48_addcredit_non_numeric_amount
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1455c1,6
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'addcredit' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'money' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 27_buy_valid_game
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1455c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buy' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'portal' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 28_buy_sell_standard_rejected
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1454c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'seller' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buy' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'portal' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 29_buy_nonexistent_game
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1456c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buy' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'no' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 30_buy_insufficient_credit
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1453c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'lowcredit' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buy' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'expensive' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 31_buy_already_owned_game
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1455c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buy' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'owned' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 08_create_valid_user
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1455c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'create' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'newuser' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 09_create_each_user_type
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1446c1,16
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'create' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'newadmin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 10_create_non_admin_rejected
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1453c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'fulluser' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'create' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'newuser' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 11_create_duplicate_username
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1456c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'create' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 12_create_username_too_long
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1453c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'create' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'abcdefghijklmnop' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 13_create_username_length_boundary
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1453c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'create' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'abcdefghijklmno' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 14_delete_valid_user
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1455c1,6
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'delete' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'fulluser' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 15_delete_non_admin_rejected
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1455c1,6
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'fulluser' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'delete' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 16_delete_nonexistent_user
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1455c1,6
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'delete' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'ghostuser' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 17_delete_current_user_rejected
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1455c1,6
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'delete' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 18_deleted_seller_inventory_unavailable
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1452c1,9
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'delete' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'seller' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 43_list_available_games
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1457c1,8
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'list' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'logout' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 44_list_before_login_rejected
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1457c1,5
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'list' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'logout' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 01_valid_admin_login
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1457c1,4
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'logout' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+checking outputs of test 02_valid_standard_login
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1457c1,4
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'fulluser' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'logout' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+checking outputs of test 03_invalid_username_login
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1458c1,3
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'no_such_user' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < -- Menu --
+      < login	- log into your account
+checking outputs of test 04_transaction_before_login
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1455c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buy' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'portal' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'seller' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 05_second_login_rejected
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1456c1,6
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 06_logout_without_login
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1457c1,5
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'logout' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'logout' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 07_only_login_after_logout
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1453c1,10
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'logout' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buy' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 32_refund_valid
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1454c1,8
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'refund' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 33_refund_non_admin_rejected
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1454c1,8
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'fulluser' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'refund' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 34_refund_missing_buyer
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1454c1,8
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'refund' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'ghostbuyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 35_refund_missing_seller
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1454c1,8
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'refund' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 36_refund_over_seller_balance_requirement_gap
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1454c1,8
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'admin' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'refund' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 19_sell_valid_game
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1456c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'seller' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'sell' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'new' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 20_sell_buy_standard_rejected
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1456c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'buyer' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'sell' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'new' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 21_sell_price_max_boundary
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1455c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'seller' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'sell' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'max' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 22_sell_price_over_max
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1455c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'seller' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'sell' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'too' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 23_sell_game_name_25_chars
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1453c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'seller' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'sell' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'abcdefghijklmnopqrstuvwxy' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 24_sell_game_name_too_long
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1453c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'seller' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'sell' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'abcdefghijklmnopqrstuvwxyz' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 25_sell_duplicate_game_name
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1454c1,7
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'seller' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'sell' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'portal' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+checking outputs of test 26_new_sale_not_usable_same_session
+  [transaction file] FAIL - no transaction file was written
+  [terminal output]  FAIL - differences (< actual, > expected):
+      1,1450c1,13
+      <  _   _       _       ____  _                       
+      < | \ | | ___ | |_    / ___|| |_ ___  __ _ _ __ ___
+      < |  \| |/ _ \| __|___\___ \| __/ _ \/ _` | '_ ` _ \ 
+      < | |\  | (_) | ||_____|__) | ||  __/ (_| | | | | | |
+      < |_| \_|\___/ \__|   |____/ \__\___|\__,_|_| |_| |_|
+      < Version 0.0.1
+      < 
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < usage: login [name]
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'seller' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'sell' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+      < 
+      < >
+      < 'fresh' is not an available command.
+      < 
+      < -- Menu --
+      < login	- log into your account
+      < exit	- exit the program
+
+================ SUMMARY ================
+Passed: 0   Failed: 48
+  FAILED: 37_addcredit_standard_valid
+  FAILED: 38_addcredit_admin_valid_target
+  FAILED: 39_addcredit_admin_invalid_target
+  FAILED: 40_addcredit_1000_boundary
+  FAILED: 41_addcredit_over_1000_single
+  FAILED: 42_addcredit_over_1000_cumulative
+  FAILED: 45_unknown_transaction
+  FAILED: 46_sell_non_numeric_price
+  FAILED: 47_refund_non_numeric_amount
+  FAILED: 48_addcredit_non_numeric_amount
+  FAILED: 27_buy_valid_game
+  FAILED: 28_buy_sell_standard_rejected
+  FAILED: 29_buy_nonexistent_game
+  FAILED: 30_buy_insufficient_credit
+  FAILED: 31_buy_already_owned_game
+  FAILED: 08_create_valid_user
+  FAILED: 09_create_each_user_type
+  FAILED: 10_create_non_admin_rejected
+  FAILED: 11_create_duplicate_username
+  FAILED: 12_create_username_too_long
+  FAILED: 13_create_username_length_boundary
+  FAILED: 14_delete_valid_user
+  FAILED: 15_delete_non_admin_rejected
+  FAILED: 16_delete_nonexistent_user
+  FAILED: 17_delete_current_user_rejected
+  FAILED: 18_deleted_seller_inventory_unavailable
+  FAILED: 43_list_available_games
+  FAILED: 44_list_before_login_rejected
+  FAILED: 01_valid_admin_login
+  FAILED: 02_valid_standard_login
+  FAILED: 03_invalid_username_login
+  FAILED: 04_transaction_before_login
+  FAILED: 05_second_login_rejected
+  FAILED: 06_logout_without_login
+  FAILED: 07_only_login_after_logout
+  FAILED: 32_refund_valid
+  FAILED: 33_refund_non_admin_rejected
+  FAILED: 34_refund_missing_buyer
+  FAILED: 35_refund_missing_seller
+  FAILED: 36_refund_over_seller_balance_requirement_gap
+  FAILED: 19_sell_valid_game
+  FAILED: 20_sell_buy_standard_rejected
+  FAILED: 21_sell_price_max_boundary
+  FAILED: 22_sell_price_over_max
+  FAILED: 23_sell_game_name_25_chars
+  FAILED: 24_sell_game_name_too_long
+  FAILED: 25_sell_duplicate_game_name
+  FAILED: 26_new_sale_not_usable_same_session
