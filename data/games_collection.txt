@@ -1,7 +1,0 @@
-deadlock                   sully          
-deadlock                   valve          
-tf2                        valve          
-deadlock                   matthew        
-tf2                        matthew        
-super_jagua                matthew        
-END                                       

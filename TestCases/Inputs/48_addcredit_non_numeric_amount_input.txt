@@ -1,5 +1,0 @@
-login
-buyer
-addcredit
-money
-logout

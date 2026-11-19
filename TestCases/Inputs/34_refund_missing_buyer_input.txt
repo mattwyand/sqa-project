@@ -1,7 +1,0 @@
-login
-admin
-refund
-ghostbuyer
-seller
-5.00
-logout

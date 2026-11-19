@@ -1,26 +1,32 @@
 # sqa-project
 
-Game Distribution System (Steam-like) for CSCI 3060U. The Front End is in C++ (`frontend/frontend/`).
+Game Distribution System (Steam-like) for CSCI 3060U.
 
-## Build and run the Front End
+- **Front End** (C++): `frontend/` holds **Front End A**, the front end chosen for our team in Phase 4.
+  It replaced our own Front End, which is still in the git history (up to the Phase 3 merge).
+- **Back End** (Python): `backend/` is the overnight batch processor.
 
-```bash
-g++ -std=c++17 -Wall -o distribution-system frontend/frontend/*.cpp
-./distribution-system currentaccounts.txt availablegames.txt gamescollection.txt transout.atf
-```
-
-Transactions are read from standard input (one per line). The prompts and messages go to standard output.
-The daily transaction file (`transout.atf`) is written at every logout.
-
-## Run the tests (Phase 3)
+## Front End A
 
 ```bash
-./run_tests.sh      # builds the program and runs all 48 tests
-./check_tests.sh    # diffs actual vs expected terminal output and daily transaction file
+cd frontend/phase2
+make                    # builds ./frontend
+./frontend data/users.txt data/games.txt data/collection.txt transout.atf
 ```
 
-- Inputs: `TestCases/Inputs/<type>/input/NN_name_input.txt`
-- Expected: `TestCases/Outputs/<type>/expected/NN_name_expected.out` / `.etf`
-- Actual (generated): `TestCases/Outputs/<type>/actual/NN_name_actual.out` / `.atf`
-- Starting data for every test: `TestCases/data/`
-- Saved report of each test-suite run: `TestResults/`
+Its 147 requirements tests:
+
+```bash
+cd frontend/phase3
+./run_tests.sh          # builds the Front End, runs every test, then checks the results
+```
+
+## Back End
+
+```bash
+cd backend
+python main.py merged_transactions.txt old_accounts.txt old_games.txt old_collection.txt \
+               new_accounts.txt new_games.txt new_collection.txt
+```
+
+Failed constraints and fatal errors are printed on the terminal as `ERROR: <msg>` lines.

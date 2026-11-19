@@ -1,6 +1,0 @@
-login
-lowcredit
-buy
-Expensive Game
-seller
-logout

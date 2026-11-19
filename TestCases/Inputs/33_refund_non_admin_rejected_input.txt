@@ -1,7 +1,0 @@
-login
-fulluser
-refund
-buyer
-seller
-5.00
-logout

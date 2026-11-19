@@ -1,6 +1,0 @@
-login
-buyer
-buy
-No Such Game
-seller
-logout

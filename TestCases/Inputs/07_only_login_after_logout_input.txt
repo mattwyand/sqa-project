@@ -1,9 +1,0 @@
-login
-buyer
-logout
-buy
-Portal 2
-seller
-login
-buyer
-logout

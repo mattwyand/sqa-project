@@ -1,6 +1,0 @@
-login
-seller
-sell
-ABCDEFGHIJKLMNOPQRSTUVWXY
-25.00
-logout

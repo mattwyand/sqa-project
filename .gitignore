@@ -77,4 +77,14 @@ build
 distribution-system
 # Keep the test terminal-output files (the "*.out" rule above would ignore them)
 !TestCases/**/*.out
+!frontend/phase3/tests/**/*.out
 .vs/
+
+# --- Front End A (Phase 4 onward) ---
+frontend/phase2/build/
+# Keep Front End A's Makefile (the "Makefile" rule above would ignore it)
+!frontend/phase2/Makefile
+frontend/phase2/frontend
+frontend/phase3/outputs/
+# Python
+__pycache__/

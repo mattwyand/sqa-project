@@ -1,2 +1,0 @@
-login
-no_such_user
